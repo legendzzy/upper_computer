@@ -146,6 +146,13 @@ namespace Hello_World
         private void Form2_Load(object sender, EventArgs e)
         {
             runMain();
+            string[] gasRange = { "Gas1", "Gas2", "Gas3", "Gas4", "Gas5", "Gas6" };
+            checkedListBox1.Items.AddRange(gasRange);
+
+            for(int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, true); //默认全选中
+            }
         }
       
         //鼠标滚轮事件，用来缩放
@@ -191,7 +198,7 @@ namespace Hello_World
         {
             HitTestResult hit = chart1.HitTest(e.X, e.Y);
 
-            if (hit.Series != null)
+            if (hit.Series != null && hit.PointIndex != -1)
             {
                 DateTime dt = DateTime.FromOADate(hit.Series.Points[hit.PointIndex].XValue);
                 double y = hit.Series.Points[hit.PointIndex].YValues[0];
@@ -199,6 +206,18 @@ namespace Hello_World
 
                 textBox1.Text = string.Format("曲线：{0}  时间：{1}  数值：{2:F1} ", lgtext, dt, y);
             }
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            for(int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.GetItemChecked(i) == true)
+                    chart1.Series[i].Enabled = true;
+                else
+                    chart1.Series[i].Enabled = false;
+            }
+            checkedListBox1.ClearSelected();
         }
     }
 }
