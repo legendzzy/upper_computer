@@ -204,7 +204,7 @@ namespace Hello_World
                 double y = hit.Series.Points[hit.PointIndex].YValues[0];
                 string lgtext = hit.Series.LegendText;
 
-                textBox1.Text = string.Format("曲线：{0}  时间：{1}  数值：{2:F1} ", lgtext, dt, y);
+                textBox1.Text = string.Format("曲线：{0}\r\n时间：{1}\r\n数值：{2:F1}", lgtext, dt, y);
             }
         }
 
