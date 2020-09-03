@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Hello_World
+namespace upper_computer
 {
     public partial class Form1 : Form
     {
@@ -59,7 +59,7 @@ namespace Hello_World
             comboBox4.Text = "None";
             comboBox5.Text = "1";
 
-            string[] gaslist = { "all","gas1", "gas2", "gas3", "gas4", "gas5", "gas6" };
+            string[] gaslist = { "all", "gas1", "gas2", "gas3", "gas4", "gas5", "gas6" };
             comboBox6.Items.AddRange(gaslist);
             comboBox6.Text = "all";
 
@@ -317,7 +317,7 @@ namespace Hello_World
                         continue;
 
                     rownumber++;
-                    string trim = Regex.Replace(string1, "\\s{2,}", " ");
+                    string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
                     string[] result = trim.Split();
 
                     //得到一行数据处理date_time[] + gas[]

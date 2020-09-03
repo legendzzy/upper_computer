@@ -1,4 +1,4 @@
-﻿namespace Hello_World
+﻿namespace upper_computer
 {
     partial class Form1
     {

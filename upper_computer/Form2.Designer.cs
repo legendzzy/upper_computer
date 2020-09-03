@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Hello_World
+namespace upper_computer
 {
     partial class Form2
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Hello_World
+namespace upper_computer
 {
     static class Program
     {
