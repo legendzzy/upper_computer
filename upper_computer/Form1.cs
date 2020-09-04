@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Schema;
 
 namespace upper_computer
 {
@@ -31,6 +32,7 @@ namespace upper_computer
         private string[] endDateTime= new string[2];
         private DataTable dateDt = new DataTable(); //日期datatable，日期+时间仅占一列，方便数据传到图表
         private DataTable currentDt = new DataTable(); //当前数据，传到图标处理
+        private int gas_number = 0; //气体数量
 
         public Form1()
         {
@@ -59,13 +61,13 @@ namespace upper_computer
             comboBox4.Text = "None";
             comboBox5.Text = "1";
 
-            string[] gaslist = { "all", "gas1", "gas2", "gas3", "gas4", "gas5", "gas6" };
-            comboBox6.Items.AddRange(gaslist);
+            //string[] gaslist = { "all", "gas1", "gas2", "gas3", "gas4", "gas5", "gas6" };
+            comboBox6.Items.Add("all");
             comboBox6.Text = "all";
 
-            initDataSet();
-            initDateDt();//初始化DateDt表，表结构确定
-            currentDt = dateDt.Clone(); //Clone()复制表的结构
+            //initDataSet();
+            //initDateDt();//初始化DateDt表，表结构确定
+            //currentDt = dateDt.Clone(); //Clone()复制表的结构
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -310,7 +312,7 @@ namespace upper_computer
                 filename = System.IO.Path.GetFullPath(openFileDialog1.FileName);
                 StreamReader sr = new StreamReader(filename);
                 string string1 = "";
-                //textBox1.Clear();
+                
                 while ((string1 = sr.ReadLine()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(string1))
@@ -319,6 +321,19 @@ namespace upper_computer
                     rownumber++;
                     string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
                     string[] result = trim.Split();
+
+                    //当第一次读到数据时，获取气体数量，进行数据表初始化
+                    if(rownumber == 1)
+                    {
+                        gas_number = result.Length - 2;
+                        initDataSet(gas_number);
+                        initDateDt(gas_number);
+                        currentDt = dateDt.Clone();
+                        for ( int k = 0; k < gas_number; k++)
+                        {
+                            comboBox6.Items.Add("gas" + (k + 1).ToString());
+                        }                      
+                    }
 
                     //得到一行数据处理date_time[] + gas[]
                     for (int j = 0; j < result.Length; j++)
@@ -347,8 +362,6 @@ namespace upper_computer
 
                     }
                     //在此加入一行数据
-
-                    //addDataRow(date_time, gas);
 
                     addDataSet(date_time, gas, rownumber);
                     addDateDt(datetime, gas, rownumber);
@@ -411,6 +424,21 @@ namespace upper_computer
             dt.Columns.Add(dc9);//向DataTable中添加一列
         }
 
+        private void initDataSet(int number)
+        {
+            dataSet1.Tables.Clear();
+            dataSet1.Tables.Add(dt);
+            dt.Columns.Clear();
+            dt.Columns.Add(new DataColumn("id", Type.GetType("System.Int32"), ""));
+            dt.Columns.Add(new DataColumn("date", Type.GetType("System.DateTime"), ""));
+            dt.Columns.Add(new DataColumn("time", Type.GetType("System.String"), ""));
+            for (int i = 0; i < number; i++)
+            {
+                dt.Columns.Add(new DataColumn("gas" + (i + 1).ToString(), Type.GetType("System.Decimal"), ""));
+            }
+        }
+
+
         //初始化DateDt表结构
         private void initDateDt()
         {
@@ -433,6 +461,18 @@ namespace upper_computer
             dateDt.Columns.Add(dc8);//向DataTable中添加一列
         }
 
+        private void initDateDt(int number)
+        {
+            dateDt.Columns.Clear();
+            dateDt.Columns.Add(new DataColumn("id", Type.GetType("System.Int32"), ""));
+            dateDt.Columns.Add(new DataColumn("date", Type.GetType("System.DateTime"), ""));
+            for (int i = 0; i < number; i++)
+            {
+                dateDt.Columns.Add(new DataColumn("gas" + (i + 1).ToString(), Type.GetType("System.Decimal"), ""));
+            }
+        }
+
+
         //向DateSet里添加一行数据
         private void addDataSet(string[] s, float[] f, int row)
         {
@@ -440,12 +480,19 @@ namespace upper_computer
             dr["id"] = row;
             dr["date"] = s[0];
             dr["time"] = s[1];
+            /*
             dr["gas1"] = f[0];
             dr["gas2"] = f[1];
             dr["gas3"] = f[2];
             dr["gas4"] = f[3];
             dr["gas5"] = f[4];
             dr["gas6"] = f[5];
+            */
+            for(int i = 0; i < gas_number; i++)
+            {
+                dr["gas" + (i + 1).ToString()] = f[i];
+            }
+
             dt.Rows.Add(dr);
             dataSet1.AcceptChanges();
         }
@@ -457,12 +504,18 @@ namespace upper_computer
             DataRow dr = dateDt.NewRow();
             dr["id"] = row;
             dr["date"] = dt;
+            /*
             dr["gas1"] = f[0];
             dr["gas2"] = f[1];
             dr["gas3"] = f[2];
             dr["gas4"] = f[3];
             dr["gas5"] = f[4];
             dr["gas6"] = f[5];
+            */
+            for (int i = 0; i < gas_number; i++)
+            {
+                dr["gas" + (i + 1).ToString()] = f[i];
+            }
             dateDt.Rows.Add(dr);
         }
 

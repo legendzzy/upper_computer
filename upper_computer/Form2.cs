@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,9 +17,8 @@ namespace upper_computer
         private static int MAX_NUMBER = 100;
         private DataTable datatable = new DataTable();
         private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
-        
-        
-
+        //private int gas_number = 0;
+       
         public Form2(DataTable datatable)
         {
             InitializeComponent();
@@ -30,9 +30,7 @@ namespace upper_computer
             addSeries();
             setArea();
             setAttri();
-            RefreshData();
-            //chart1.Series[0].Enabled = false;
-              
+            RefreshData();              
         }
 
         public void addSeries()
@@ -47,7 +45,6 @@ namespace upper_computer
 
         public void RefreshData()
         {
-         
             //通过datatable绑定数据
         
             for(int i = 0; i < datatable.Columns.Count - 2; i++)
@@ -55,8 +52,6 @@ namespace upper_computer
                 chart1.Series[i].XValueMember = datatable.Columns[1].ColumnName;
                 chart1.Series[i].YValueMembers = datatable.Columns[i + 2].ColumnName;
                 chart1.DataBind();
-                //chart1.Series[i].XValueType = ChartValueType.DateTime;
-                //chart1.Series[i].ChartType = SeriesChartType.Line;
             }
 
 
@@ -77,7 +72,6 @@ namespace upper_computer
 
                 foreach (DataPoint dp in chart1.Series[i].Points)
                 {
-                    //textBox1.Clear();
                     if (dp.YValues[0] >= m && dp.YValues[0] != 0)
                     {
                         //dp.MarkerColor = Color.Red;
@@ -86,8 +80,6 @@ namespace upper_computer
                     }
                 }
             }
-
-
             //maxline();
         }
 
@@ -146,13 +138,17 @@ namespace upper_computer
         private void Form2_Load(object sender, EventArgs e)
         {
             runMain();
-            string[] gasRange = { "Gas1", "Gas2", "Gas3", "Gas4", "Gas5", "Gas6" };
-            checkedListBox1.Items.AddRange(gasRange);
+            //string[] gasRange = { "Gas1", "Gas2", "Gas3", "Gas4", "Gas5", "Gas6" };
+            for(int i = 0; i < datatable.Columns.Count - 2; i++)
+            {
+                checkedListBox1.Items.Add("Gas" + (i + 1).ToString());
+            }
 
             for(int i = 0; i < checkedListBox1.Items.Count; i++)
             {
                 checkedListBox1.SetItemChecked(i, true); //默认全选中
             }
+            textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值："); 
         }
       
         //鼠标滚轮事件，用来缩放
@@ -217,6 +213,7 @@ namespace upper_computer
                 else
                     chart1.Series[i].Enabled = false;
             }
+            chart1.ChartAreas[0].RecalculateAxesScale(); //刷新坐标轴
             checkedListBox1.ClearSelected();
         }
     }
