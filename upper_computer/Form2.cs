@@ -30,7 +30,8 @@ namespace upper_computer
             addSeries();
             setArea();
             setAttri();
-            RefreshData();              
+            RefreshData();
+            //setXYCursor();
         }
 
         public void addSeries()
@@ -133,6 +134,13 @@ namespace upper_computer
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSizeType = DateTimeIntervalType.Seconds;
             chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
 
+            chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
+            chart1.ChartAreas[0].CursorX.IntervalType = DateTimeIntervalType.Seconds;
+
+            chart1.ChartAreas[0].CursorY.IsUserEnabled = true;
+            chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -169,27 +177,7 @@ namespace upper_computer
             }
         }
 
-
-        public void maxline(int gas, double max)
-        {
-            string s = "gas" + gas.ToString() + "MAX";
-            chart1.Series.Add(s);
-            chart1.Series[s].MarkerSize = 6;
-            chart1.Series[s].ChartType = SeriesChartType.Spline;
-            
-            //chart1.Series["max"].IsValueShownAsLabel = true;
-            chart1.Series[s].LabelForeColor = Color.Red;
-            chart1.Series[s].SmartLabelStyle.Enabled = true;
-
-            
-            DateTime last = Convert.ToDateTime(datatable.Rows[datatable.Rows.Count - 1][1]);
-            DateTime first = Convert.ToDateTime(datatable.Rows[0][1]);
-            
-            chart1.Series[s].Points.AddXY(first, max);
-            //chart1.Series["max"].Points.AddXY(dt, m);
-            chart1.Series[s].Points.AddXY(last, max);
-        }
-
+        //鼠标点击数据点事件
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
             HitTestResult hit = chart1.HitTest(e.X, e.Y);
@@ -203,7 +191,8 @@ namespace upper_computer
                 textBox1.Text = string.Format("曲线：{0}\r\n时间：{1}\r\n数值：{2:F1}", lgtext, dt, y);
             }
         }
-
+        
+        //气体选择事件
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             for(int i = 0; i < checkedListBox1.Items.Count; i++)
@@ -215,6 +204,43 @@ namespace upper_computer
             }
             chart1.ChartAreas[0].RecalculateAxesScale(); //刷新坐标轴
             checkedListBox1.ClearSelected();
+        }
+
+        //鼠标所在坐标显示
+        private void chart1_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
+                chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
+                double cursorX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
+                double cursorY = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
+                DateTime dateTime = DateTime.FromOADate(cursorX);
+                textBox2.Text = string.Format("时间：{0}\r\n数值：{1:F1}", dateTime, cursorY);
+            }
+            catch
+            {
+            }
+        }
+
+        //气体全选
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, true);
+                chart1.Series[i].Enabled = true;
+            }
+        }
+
+        //气体全不选
+        private void button2_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, false);
+                chart1.Series[i].Enabled = false;
+            }
         }
     }
 }
