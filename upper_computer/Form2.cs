@@ -17,8 +17,9 @@ namespace upper_computer
         private static int MAX_NUMBER = 100;
         private DataTable datatable = new DataTable();
         private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
-        //private int gas_number = 0;
-       
+        private DataPoint clickDp = null;
+        private DataPoint clickDpDuplicate = new DataPoint();
+
         public Form2(DataTable datatable)
         {
             InitializeComponent();
@@ -186,9 +187,47 @@ namespace upper_computer
             {
                 DateTime dt = DateTime.FromOADate(hit.Series.Points[hit.PointIndex].XValue);
                 double y = hit.Series.Points[hit.PointIndex].YValues[0];
-                string lgtext = hit.Series.LegendText;
-
-                textBox1.Text = string.Format("曲线：{0}\r\n时间：{1}\r\n数值：{2:F1}", lgtext, dt, y);
+                string lgtext = hit.Series.LegendText;   
+                textBox1.Text = string.Format("曲线：{0}  时间：{1}  数值：{2:F1}", lgtext, dt, y);
+                DataPoint dp = hit.Series.Points[hit.PointIndex];
+                if(clickDp == dp) //如果和上一次点击的点坐标相同
+                {
+                    if(dp.MarkerStyle == MarkerStyle.Circle && dp.MarkerColor == Color.Red && dp.MarkerSize == 8) //如果是已被选中的点，回到原本样式
+                    {
+                        setPointMarker(clickDpDuplicate, dp);
+                        textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值：");
+                    }
+                    else //再次点击的点是该点的原本样式，需要重新被标记
+                    {
+                        //this.clickDp.XValue = dp.XValue;
+                        //this.clickDp.YValues[0] = dp.YValues[0];
+                        dp.MarkerSize = 8;
+                        dp.MarkerColor = Color.Red;
+                        dp.MarkerStyle = MarkerStyle.Circle;
+                    }
+                }
+                else //点击了其他的点or第一次点击
+                {
+                    if(clickDp == null)//第一次点击
+                    {
+                        setPointMarker(dp, clickDpDuplicate);
+                        //this.clickDp.XValue = dp.XValue;
+                        //this.clickDp.YValues[0] = dp.YValues[0];
+                        this.clickDp = dp;
+                        dp.MarkerSize = 8;
+                        dp.MarkerColor = Color.Red;
+                        dp.MarkerStyle = MarkerStyle.Circle;
+                    }
+                    else //点击了其他点
+                    {
+                        setPointMarker(clickDpDuplicate, clickDp);//将上一个点的属性还原
+                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，再进行更改
+                        dp.MarkerSize = 8;
+                        dp.MarkerColor = Color.Red;
+                        dp.MarkerStyle = MarkerStyle.Circle;
+                        clickDp = dp;
+                    }
+                }
             }
         }
         
@@ -216,7 +255,7 @@ namespace upper_computer
                 double cursorX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
                 double cursorY = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
                 DateTime dateTime = DateTime.FromOADate(cursorX);
-                textBox2.Text = string.Format("时间：{0}\r\n数值：{1:F1}", dateTime, cursorY);
+                textBox2.Text = string.Format("时间：{0}  数值：{1:F1}", dateTime, cursorY);
             }
             catch
             {
@@ -241,6 +280,27 @@ namespace upper_computer
                 checkedListBox1.SetItemChecked(i, false);
                 chart1.Series[i].Enabled = false;
             }
+        }
+
+        private void chart1_GetToolTipText(object sender, ToolTipEventArgs e)
+        {
+            if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
+            {
+                int i = e.HitTestResult.PointIndex;
+                DataPoint dp = e.HitTestResult.Series.Points[i];
+                DateTime dt = DateTime.FromOADate(dp.XValue);
+                double y = dp.YValues[0];
+                string lgtext = e.HitTestResult.Series.LegendText;
+
+                e.Text = string.Format("曲线：{0}\r\n时间：{1}\r\n数值：{2:F1}", lgtext, dt, y);
+            }
+        }
+
+        private void setPointMarker(DataPoint source, DataPoint dp)
+        {
+            dp.MarkerStyle = source.MarkerStyle;
+            dp.MarkerSize = source.MarkerSize;
+            dp.MarkerColor = source.MarkerColor;
         }
     }
 }
