@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -16,14 +17,21 @@ namespace upper_computer
     {
         private static int MAX_NUMBER = 100;
         private DataTable datatable = new DataTable();
-        private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
+        //private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
         private DataPoint clickDp = null;
         private DataPoint clickDpDuplicate = new DataPoint();
+        private DataPoint[] MoveDp = new DataPoint[6] { null, null, null, null, null, null };
+        private DataPoint[] MoveDpDuplicate = new DataPoint[6];
+        private int[] gasChosen = new int[6] { 0, 0, 0, 0, 0, 0 };
 
         public Form2(DataTable datatable)
         {
             InitializeComponent();
             this.datatable = datatable;
+            for(int i = 0; i < 6; i++)
+            {
+                MoveDpDuplicate[i] = new DataPoint();
+            }
         }
 
         public void runMain()
@@ -70,7 +78,7 @@ namespace upper_computer
                         m = Convert.ToDouble(datatable.Rows[j][i + 2]);
                     }
                 }
-                gasMax[i] = m;
+                //gasMax[i] = m;
 
                 foreach (DataPoint dp in chart1.Series[i].Points)
                 {
@@ -96,7 +104,7 @@ namespace upper_computer
                 chart1.Series[i].LegendText = "Gas" + (i+1).ToString();//系列名字 
                 
                 chart1.Series[i].MarkerStyle = MarkerStyle.Circle;
-                chart1.Series[i].MarkerSize = 3;
+                chart1.Series[i].MarkerSize = 4;
                 //chart1.Series[i].MarkerColor = Color.Red;
                 //chart1.Series[i].ToolTip = "#VALX,#VALY";
             }
@@ -139,8 +147,8 @@ namespace upper_computer
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
             chart1.ChartAreas[0].CursorX.IntervalType = DateTimeIntervalType.Seconds;
 
-            chart1.ChartAreas[0].CursorY.IsUserEnabled = true;
-            chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            chart1.ChartAreas[0].CursorY.IsUserEnabled = false;
+            chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
 
         }
 
@@ -210,7 +218,7 @@ namespace upper_computer
                 {
                     if(clickDp == null)//第一次点击
                     {
-                        setPointMarker(dp, clickDpDuplicate);
+                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，再进行更改
                         //this.clickDp.XValue = dp.XValue;
                         //this.clickDp.YValues[0] = dp.YValues[0];
                         this.clickDp = dp;
@@ -229,6 +237,7 @@ namespace upper_computer
                     }
                 }
             }
+
         }
         
         //气体选择事件
@@ -251,11 +260,31 @@ namespace upper_computer
             try
             {
                 chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
-                chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
+                //chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
                 double cursorX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
                 double cursorY = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
                 DateTime dateTime = DateTime.FromOADate(cursorX);
-                textBox2.Text = string.Format("时间：{0}  数值：{1:F1}", dateTime, cursorY);
+                textBox2.Text = "日期：" + dateTime.ToString()+ "  ";
+
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    if (checkedListBox1.GetItemChecked(i) == true)
+                        gasChosen[i] = 1;
+                    else
+                        gasChosen[i] = 0;
+                }
+                for (int i = 0; i < datatable.Columns.Count - 2; i++)
+                {
+                    foreach (DataPoint dp in chart1.Series[i].Points)
+                    {
+                        DateTime d = DateTime.FromOADate(dp.XValue);
+                        if (dateTime.Second == d.Second && dateTime.Minute == d.Minute && dateTime.Hour == d.Hour && dateTime.Date == d.Date) //找到了横坐标时间相同的点
+                        {
+                            if(gasChosen[i] == 1)
+                                textBox2.AppendText("Gas" + (i + 1).ToString() + "：" + string.Format("{0:F1}", dp.YValues[0]) + "  ");
+                        }
+                    }
+                } 
             }
             catch
             {
