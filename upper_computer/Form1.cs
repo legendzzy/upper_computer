@@ -14,6 +14,14 @@ using System.Xml.Schema;
 
 namespace upper_computer
 {
+    public struct Gas
+    {
+        public string name;
+        public float range;
+        public string unit;
+        public float low_level_alarm;
+        public float high_level_alarm;
+    }
     public partial class Form1 : Form
     {
         private long receive_count = 0; //接收字节计数, 作用相当于全局变量
@@ -33,7 +41,8 @@ namespace upper_computer
         private DataTable dateDt = new DataTable(); //日期datatable，日期+时间仅占一列，方便数据传到图表
         private DataTable currentDt = new DataTable(); //当前数据，传到图标处理
         private int gas_number = 0; //气体数量
-
+        private Gas[] gasSet = new Gas[6];
+        
         public Form1()
         {
             InitializeComponent();
@@ -313,6 +322,25 @@ namespace upper_computer
                 StreamReader sr = new StreamReader(filename);
                 string string1 = "";
                 
+                for(int i = 0; i < 6; i++)
+                {
+                    string1 = sr.ReadLine();
+                    if (string.IsNullOrWhiteSpace(string1))
+                        break;
+                    else
+                    {
+                        string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
+                        string[] result = trim.Split();
+                        gasSet[i] = new Gas();
+                        gasSet[i].name = result[0];
+                        gasSet[i].range = Convert.ToSingle(result[1]);
+                        gasSet[i].unit = result[2];
+                        gasSet[i].low_level_alarm = Convert.ToSingle(result[3]);
+                        gasSet[i].high_level_alarm = Convert.ToSingle(result[4]);
+                        
+                    }
+                }
+
                 while ((string1 = sr.ReadLine()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(string1))
@@ -331,7 +359,8 @@ namespace upper_computer
                         currentDt = dateDt.Clone();
                         for ( int k = 0; k < gas_number; k++)
                         {
-                            comboBox6.Items.Add("gas" + (k + 1).ToString());
+                            //comboBox6.Items.Add("gas" + (k + 1).ToString());
+                            comboBox6.Items.Add(gasSet[k].name);
                         }                      
                     }
 
@@ -434,7 +463,7 @@ namespace upper_computer
             dt.Columns.Add(new DataColumn("time", Type.GetType("System.String"), ""));
             for (int i = 0; i < number; i++)
             {
-                dt.Columns.Add(new DataColumn("gas" + (i + 1).ToString(), Type.GetType("System.Decimal"), ""));
+                dt.Columns.Add(new DataColumn(gasSet[i].name, Type.GetType("System.Decimal"), ""));
             }
         }
 
@@ -468,7 +497,7 @@ namespace upper_computer
             dateDt.Columns.Add(new DataColumn("date", Type.GetType("System.DateTime"), ""));
             for (int i = 0; i < number; i++)
             {
-                dateDt.Columns.Add(new DataColumn("gas" + (i + 1).ToString(), Type.GetType("System.Decimal"), ""));
+                dateDt.Columns.Add(new DataColumn(gasSet[i].name, Type.GetType("System.Decimal"), ""));
             }
         }
 
@@ -480,17 +509,9 @@ namespace upper_computer
             dr["id"] = row;
             dr["date"] = s[0];
             dr["time"] = s[1];
-            /*
-            dr["gas1"] = f[0];
-            dr["gas2"] = f[1];
-            dr["gas3"] = f[2];
-            dr["gas4"] = f[3];
-            dr["gas5"] = f[4];
-            dr["gas6"] = f[5];
-            */
             for(int i = 0; i < gas_number; i++)
             {
-                dr["gas" + (i + 1).ToString()] = f[i];
+                dr[gasSet[i].name] = f[i];
             }
 
             dt.Rows.Add(dr);
@@ -504,17 +525,9 @@ namespace upper_computer
             DataRow dr = dateDt.NewRow();
             dr["id"] = row;
             dr["date"] = dt;
-            /*
-            dr["gas1"] = f[0];
-            dr["gas2"] = f[1];
-            dr["gas3"] = f[2];
-            dr["gas4"] = f[3];
-            dr["gas5"] = f[4];
-            dr["gas6"] = f[5];
-            */
             for (int i = 0; i < gas_number; i++)
             {
-                dr["gas" + (i + 1).ToString()] = f[i];
+                dr[gasSet[i].name] = f[i];
             }
             dateDt.Rows.Add(dr);
         }
@@ -533,6 +546,7 @@ namespace upper_computer
             endDateTime[0] = endarr[0];
             endDateTime[1] = endarr[1];
 
+            //当前显示页的数据表筛选
             if(startDateTime[0].Equals(endDateTime[0])) //如果起始日期相同
             {
                 DataRow[] drArr = dt.Select("time>='" + startDateTime[1] + "' and time<='" + endDateTime[1] + "'"); // 日期相同，只用考虑起始时间
@@ -573,9 +587,10 @@ namespace upper_computer
                 dtNew.DefaultView.Sort = "id ASC";
                 dtNew = dtNew.DefaultView.ToTable();
                 selectGas(dtNew);
-                //dataGridView1.DataSource = dtNew;
             }
 
+
+            //要传输到图表的数据表的筛选
             DataRow[] dr = dateDt.Select("date>='" + sToDate(start) + "' and date<='" + sToDate(end) + "'");
 
             //把一个表的数据复制到另一个表
@@ -645,7 +660,7 @@ namespace upper_computer
             }
         }
 
-        //当选择气体为all时，取消气体上限下限
+        //当选择气体为all时，取消气体上限下限；当选中某气体时，用高低报当作默认上下限
         private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(comboBox6.Text.Equals("all"))
@@ -657,6 +672,37 @@ namespace upper_computer
             {
                 numericUpDown2.Enabled = true;
                 numericUpDown3.Enabled = true;
+
+                switch (comboBox6.SelectedIndex)
+                {
+                    case 1:
+                        numericUpDown2.Value = (decimal)gasSet[0].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[0].low_level_alarm;
+                        break;
+                    case 2:
+                        numericUpDown2.Value = (decimal)gasSet[1].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[1].low_level_alarm;
+                        break;
+                    case 3:
+                        numericUpDown2.Value = (decimal)gasSet[2].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[2].low_level_alarm;
+                        break;
+                    case 4:
+                        numericUpDown2.Value = (decimal)gasSet[3].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[3].low_level_alarm;
+                        break;
+                    case 5:
+                        numericUpDown2.Value = (decimal)gasSet[4].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[4].low_level_alarm;
+                        break;
+                    case 6:
+                        numericUpDown2.Value = (decimal)gasSet[5].high_level_alarm;
+                        numericUpDown3.Value = (decimal)gasSet[5].low_level_alarm;
+                        break;
+                    default:
+                        break;
+
+                }
             }
         }
 
@@ -672,10 +718,11 @@ namespace upper_computer
         //图表显示按钮
         private void button7_Click(object sender, EventArgs e)
         {
-            Form2 f2 = new Form2(currentDt);
+            Form2 f2 = new Form2(currentDt, gasSet);
             f2.Show();
         }
 
+        //字符串转DateTime类
         private DateTime sToDate(string s)
         {
             dtFormat.ShortDatePattern = "yyyy-MM-dd HH:mm:ss";

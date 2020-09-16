@@ -20,18 +20,16 @@ namespace upper_computer
         //private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
         private DataPoint clickDp = null;
         private DataPoint clickDpDuplicate = new DataPoint();
-        private DataPoint[] MoveDp = new DataPoint[6] { null, null, null, null, null, null };
-        private DataPoint[] MoveDpDuplicate = new DataPoint[6];
+        private Gas[] gasSet = new Gas[6];
         private int[] gasChosen = new int[6] { 0, 0, 0, 0, 0, 0 };
+        private int gasNumber = 0;
 
-        public Form2(DataTable datatable)
+        public Form2(DataTable datatable, Gas[] gasSet)
         {
             InitializeComponent();
             this.datatable = datatable;
-            for(int i = 0; i < 6; i++)
-            {
-                MoveDpDuplicate[i] = new DataPoint();
-            }
+            this.gasSet = gasSet;
+            gasNumber = datatable.Columns.Count - 2;
         }
 
         public void runMain()
@@ -40,14 +38,15 @@ namespace upper_computer
             setArea();
             setAttri();
             RefreshData();
-            //setXYCursor();
+            initCheckedListBox();
+            setPanel();
         }
 
         public void addSeries()
         {
             chart1.DataSource = datatable;
             chart1.Series.Clear();
-            for(int i = 0; i < datatable.Columns.Count - 2; i++)
+            for(int i = 0; i < gasNumber; i++)
             {
                 chart1.Series.Add(i.ToString());
             }
@@ -57,7 +56,7 @@ namespace upper_computer
         {
             //通过datatable绑定数据
         
-            for(int i = 0; i < datatable.Columns.Count - 2; i++)
+            for(int i = 0; i < gasNumber; i++)
             {
                 chart1.Series[i].XValueMember = datatable.Columns[1].ColumnName;
                 chart1.Series[i].YValueMembers = datatable.Columns[i + 2].ColumnName;
@@ -68,7 +67,7 @@ namespace upper_computer
             //求出最大点
             double m = 0;
 
-            for (int i = 0; i < datatable.Columns.Count - 2; i++)
+            for (int i = 0; i < gasNumber; i++)
             {
                 m = 0;
                 for(int j = 0; j < datatable.Rows.Count; j++)
@@ -95,13 +94,13 @@ namespace upper_computer
 
         public void setAttri()
         {
-            for (int i = 0; i < datatable.Columns.Count - 2; i++)
+            for (int i = 0; i < gasNumber; i++)
             {
                 chart1.Series[i].ChartType = SeriesChartType.Line;
                 chart1.Series[i].XValueType = ChartValueType.DateTime;
           
-                chart1.Series[i].LegendToolTip = "Gas" + (i + 1).ToString();//鼠标放到系列上出现的文字
-                chart1.Series[i].LegendText = "Gas" + (i+1).ToString();//系列名字 
+                chart1.Series[i].LegendToolTip = gasSet[i].name;//鼠标放到系列上出现的文字
+                chart1.Series[i].LegendText = gasSet[i].name;//系列名字 
                 
                 chart1.Series[i].MarkerStyle = MarkerStyle.Circle;
                 chart1.Series[i].MarkerSize = 4;
@@ -155,17 +154,7 @@ namespace upper_computer
         private void Form2_Load(object sender, EventArgs e)
         {
             runMain();
-            //string[] gasRange = { "Gas1", "Gas2", "Gas3", "Gas4", "Gas5", "Gas6" };
-            for(int i = 0; i < datatable.Columns.Count - 2; i++)
-            {
-                checkedListBox1.Items.Add("Gas" + (i + 1).ToString());
-            }
-
-            for(int i = 0; i < checkedListBox1.Items.Count; i++)
-            {
-                checkedListBox1.SetItemChecked(i, true); //默认全选中
-            }
-            textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值："); 
+            
         }
       
         //鼠标滚轮事件，用来缩放
@@ -273,15 +262,62 @@ namespace upper_computer
                     else
                         gasChosen[i] = 0;
                 }
-                for (int i = 0; i < datatable.Columns.Count - 2; i++)
+                for (int i = 0; i < gasNumber; i++)
                 {
                     foreach (DataPoint dp in chart1.Series[i].Points)
                     {
                         DateTime d = DateTime.FromOADate(dp.XValue);
                         if (dateTime.Second == d.Second && dateTime.Minute == d.Minute && dateTime.Hour == d.Hour && dateTime.Date == d.Date) //找到了横坐标时间相同的点
                         {
+                            switch (i)
+                            {
+                                case 0:
+                                    label12.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
+                                        label12.ForeColor = Color.Green;
+                                    else
+                                        label12.ForeColor = Color.Red;
+                                    break;
+                                case 1:
+                                    label13.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
+                                        label13.ForeColor = Color.Green;
+                                    else
+                                        label13.ForeColor = Color.Red;
+                                    break;
+                                case 2:
+                                    label14.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
+                                        label14.ForeColor = Color.Green;
+                                    else
+                                        label14.ForeColor = Color.Red;
+                                    break;
+                                case 3:
+                                    label15.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
+                                        label15.ForeColor = Color.Green;
+                                    else
+                                        label15.ForeColor = Color.Red;
+                                    break;
+                                case 4:
+                                    label16.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
+                                        label16.ForeColor = Color.Green;
+                                    else
+                                        label16.ForeColor = Color.Red;
+                                    break;
+                                case 5:
+                                    label17.Text = dp.YValues[0].ToString();
+                                    if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
+                                        label17.ForeColor = Color.Green;
+                                    else
+                                        label17.ForeColor = Color.Red;
+                                    break;
+                                default:
+                                    break;
+                            }
                             if(gasChosen[i] == 1)
-                                textBox2.AppendText("Gas" + (i + 1).ToString() + "：" + string.Format("{0:F1}", dp.YValues[0]) + "  ");
+                                textBox2.AppendText(gasSet[i].name + "：" + string.Format("{0:F1}", dp.YValues[0]) + "  ");
                         }
                     }
                 } 
@@ -299,6 +335,7 @@ namespace upper_computer
                 checkedListBox1.SetItemChecked(i, true);
                 chart1.Series[i].Enabled = true;
             }
+            chart1.ChartAreas[0].RecalculateAxesScale();
         }
 
         //气体全不选
@@ -331,5 +368,135 @@ namespace upper_computer
             dp.MarkerSize = source.MarkerSize;
             dp.MarkerColor = source.MarkerColor;
         }
+
+        private void initCheckedListBox()
+        {
+            for (int i = 0; i < gasNumber; i++)
+            {
+                checkedListBox1.Items.Add(gasSet[i].name);
+            }
+
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, true); //默认全选中
+            }
+            textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值：");
+        }
+
+        private void setPanel()
+        {
+            switch (gasNumber)
+            {
+                case 6:
+                    label5.Text = gasSet[0].name;
+                    label6.Text = gasSet[1].name;
+                    label7.Text = gasSet[2].name;
+                    label8.Text = gasSet[3].name;
+                    label9.Text = gasSet[4].name;
+                    label10.Text = gasSet[5].name;
+                    label19.Text = gasSet[0].unit;
+                    label20.Text = gasSet[1].unit;
+                    label21.Text = gasSet[2].unit;
+                    label22.Text = gasSet[3].unit;
+                    label23.Text = gasSet[4].unit;
+                    label24.Text = gasSet[5].unit;
+                    break;
+                case 5:
+                    label5.Text = gasSet[0].name;
+                    label6.Text = gasSet[1].name;
+                    label7.Text = gasSet[2].name;
+                    label8.Text = gasSet[3].name;
+                    label9.Text = gasSet[4].name;
+                    label19.Text = gasSet[0].unit;
+                    label20.Text = gasSet[1].unit;
+                    label21.Text = gasSet[2].unit;
+                    label22.Text = gasSet[3].unit;
+                    label23.Text = gasSet[4].unit;
+                    label10.Visible = false;
+                    label17.Visible = false;
+                    label24.Visible = false;
+                    panel3.Size = new Size(197, 285);
+                    break;
+                case 4:
+                    label5.Text = gasSet[0].name;
+                    label6.Text = gasSet[1].name;
+                    label7.Text = gasSet[2].name;
+                    label8.Text = gasSet[3].name;
+                    label19.Text = gasSet[0].unit;
+                    label20.Text = gasSet[1].unit;
+                    label21.Text = gasSet[2].unit;
+                    label22.Text = gasSet[3].unit;
+                    label9.Visible = false;
+                    label16.Visible = false;
+                    label23.Visible = false;
+                    label10.Visible = false;
+                    label17.Visible = false;
+                    label24.Visible = false;
+                    panel3.Size = new Size(197, 240);
+                    break;
+                case 3:
+                    label5.Text = gasSet[0].name;
+                    label6.Text = gasSet[1].name;
+                    label7.Text = gasSet[2].name;
+                    label19.Text = gasSet[0].unit;
+                    label20.Text = gasSet[1].unit;
+                    label21.Text = gasSet[2].unit;
+                    label9.Visible = false;
+                    label16.Visible = false;
+                    label23.Visible = false;
+                    label10.Visible = false;
+                    label17.Visible = false;
+                    label24.Visible = false;
+                    label8.Visible = false;
+                    label15.Visible = false;
+                    label22.Visible = false;
+                    panel3.Size = new Size(197, 195);
+                    break;
+                case 2:
+                    label5.Text = gasSet[0].name;
+                    label6.Text = gasSet[1].name;
+                    label19.Text = gasSet[0].unit;
+                    label20.Text = gasSet[1].unit;
+                    label9.Visible = false;
+                    label16.Visible = false;
+                    label23.Visible = false;
+                    label10.Visible = false;
+                    label17.Visible = false;
+                    label24.Visible = false;
+                    label8.Visible = false;
+                    label15.Visible = false;
+                    label22.Visible = false;
+                    label7.Visible = false;
+                    label14.Visible = false;
+                    label21.Visible = false;
+                    panel3.Size = new Size(197, 150);
+                    break;
+                case 1:
+                    label5.Text = gasSet[0].name;
+                    label19.Text = gasSet[0].unit;
+                    label9.Visible = false;
+                    label16.Visible = false;
+                    label23.Visible = false;
+                    label10.Visible = false;
+                    label17.Visible = false;
+                    label24.Visible = false;
+                    label8.Visible = false;
+                    label15.Visible = false;
+                    label22.Visible = false;
+                    label7.Visible = false;
+                    label14.Visible = false;
+                    label21.Visible = false;
+                    label6.Visible = false;
+                    label13.Visible = false;
+                    label20.Visible = false;
+                    panel3.Size = new Size(197, 105);
+                    break;
+
+                default:
+                    break;
+
+            }
+        }
+
     }
 }
