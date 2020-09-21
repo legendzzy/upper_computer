@@ -23,6 +23,7 @@ namespace upper_computer
         private Gas[] gasSet = new Gas[6];
         private int[] gasChosen = new int[6] { 0, 0, 0, 0, 0, 0 };
         private int gasNumber = 0;
+        private int gasIndex = -1;
 
         public Form2(DataTable datatable, Gas[] gasSet)
         {
@@ -30,6 +31,15 @@ namespace upper_computer
             this.datatable = datatable;
             this.gasSet = gasSet;
             gasNumber = datatable.Columns.Count - 2;
+        }
+
+        public Form2(DataTable datatable, Gas[] gasSet, int gasIndex)
+        {
+            InitializeComponent();
+            this.datatable = datatable;
+            this.gasSet = gasSet;
+            gasNumber = datatable.Columns.Count - 2;
+            this.gasIndex = gasIndex;
         }
 
         public void runMain()
@@ -48,7 +58,7 @@ namespace upper_computer
             chart1.Series.Clear();
             for(int i = 0; i < gasNumber; i++)
             {
-                chart1.Series.Add(i.ToString());
+                chart1.Series.Add(gasSet[i].name);
             }
         }
 
@@ -85,7 +95,7 @@ namespace upper_computer
                     {
                         //dp.MarkerColor = Color.Red;
                         dp.MarkerStyle = MarkerStyle.Star5;
-                        dp.MarkerSize = 6;
+                        dp.MarkerSize = 8;
                     }
                 }
             }
@@ -103,9 +113,7 @@ namespace upper_computer
                 chart1.Series[i].LegendText = gasSet[i].name;//系列名字 
                 
                 chart1.Series[i].MarkerStyle = MarkerStyle.Circle;
-                chart1.Series[i].MarkerSize = 4;
-                //chart1.Series[i].MarkerColor = Color.Red;
-                //chart1.Series[i].ToolTip = "#VALX,#VALY";
+                chart1.Series[i].MarkerSize = 5;
             }
         }
 
@@ -163,15 +171,15 @@ namespace upper_computer
             if (e.Delta > 0)//鼠标向上
             {
                 if (chart1.ChartAreas[0].AxisX.ScaleView.Size < MAX_NUMBER)//判断显示的最大数值
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 5;//+=5---滚动一次显示5个
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 3;//+=5---滚动一次显示5个
 
             }
             else//鼠标向下滚动
             {
-                if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 5)
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 5;// - = 5---滚动一次减小显示5个
-                else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 5)
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size = 2;
+                if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 3)
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 3;// - = 5---滚动一次减小显示5个
+                else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 3)
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
             }
         }
 
@@ -184,8 +192,17 @@ namespace upper_computer
             {
                 DateTime dt = DateTime.FromOADate(hit.Series.Points[hit.PointIndex].XValue);
                 double y = hit.Series.Points[hit.PointIndex].YValues[0];
-                string lgtext = hit.Series.LegendText;   
-                textBox1.Text = string.Format("曲线：{0}  时间：{1}  数值：{2:F1}", lgtext, dt, y);
+                string lgtext = hit.Series.LegendText;
+                int seriesindex = 0;
+                for(int i = 0; i < 6; i++)
+                {
+                    if (hit.Series.Equals(chart1.Series[i]))
+                    {
+                        seriesindex = i;
+                        break;
+                    }
+                }
+                textBox1.Text = string.Format("曲线：{0}  时间：{1}  数值：{2:F1}{3}", lgtext, dt, y, gasSet[seriesindex].unit);
                 DataPoint dp = hit.Series.Points[hit.PointIndex];
                 if(clickDp == dp) //如果和上一次点击的点坐标相同
                 {
@@ -253,7 +270,7 @@ namespace upper_computer
                 double cursorX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
                 double cursorY = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
                 DateTime dateTime = DateTime.FromOADate(cursorX);
-                textBox2.Text = "日期：" + dateTime.ToString()+ "  ";
+                textBox2.Text = dateTime.ToString()+ "  ";
 
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
@@ -273,43 +290,55 @@ namespace upper_computer
                             {
                                 case 0:
                                     label12.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
+                                    if(dp.YValues[0] < gasSet[0].low_level_alarm)
                                         label12.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
+                                        label12.ForeColor = Color.Orange;
                                     else
                                         label12.ForeColor = Color.Red;
                                     break;
                                 case 1:
                                     label13.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
+                                    if (dp.YValues[0] < gasSet[1].low_level_alarm)
                                         label13.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
+                                        label13.ForeColor = Color.Orange;
                                     else
                                         label13.ForeColor = Color.Red;
                                     break;
                                 case 2:
                                     label14.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
+                                    if (dp.YValues[0] < gasSet[2].low_level_alarm)
                                         label14.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
+                                        label14.ForeColor = Color.Orange;
                                     else
                                         label14.ForeColor = Color.Red;
                                     break;
                                 case 3:
                                     label15.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
+                                    if (dp.YValues[0] < gasSet[3].low_level_alarm)
                                         label15.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
+                                        label15.ForeColor = Color.Orange;
                                     else
                                         label15.ForeColor = Color.Red;
                                     break;
                                 case 4:
                                     label16.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
+                                    if (dp.YValues[0] < gasSet[4].low_level_alarm)
                                         label16.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
+                                        label16.ForeColor = Color.Orange;
                                     else
                                         label16.ForeColor = Color.Red;
                                     break;
                                 case 5:
                                     label17.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
+                                    if (dp.YValues[0] < gasSet[5].low_level_alarm)
                                         label17.ForeColor = Color.Green;
+                                    else if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
+                                        label17.ForeColor = Color.Orange;
                                     else
                                         label17.ForeColor = Color.Red;
                                     break;
@@ -317,7 +346,7 @@ namespace upper_computer
                                     break;
                             }
                             if(gasChosen[i] == 1)
-                                textBox2.AppendText(gasSet[i].name + "：" + string.Format("{0:F1}", dp.YValues[0]) + "  ");
+                                textBox2.AppendText(gasSet[i].name + "：" + string.Format("{0:F1}", dp.YValues[0]) + gasSet[i].unit + "  ");
                         }
                     }
                 } 
@@ -375,10 +404,23 @@ namespace upper_computer
             {
                 checkedListBox1.Items.Add(gasSet[i].name);
             }
-
-            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            if(gasIndex < 0)
             {
-                checkedListBox1.SetItemChecked(i, true); //默认全选中
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    checkedListBox1.SetItemChecked(i, true); //默认全选中
+                }
+            }
+            else
+            {
+                checkedListBox1.SetItemChecked(gasIndex, true);
+                for(int i = 0; i < gasNumber; i++)
+                {
+                    if(checkedListBox1.GetItemChecked(i) == false)
+                    {
+                        chart1.Series[i].Enabled = false;
+                    }
+                }
             }
             textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值：");
         }

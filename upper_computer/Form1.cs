@@ -331,13 +331,15 @@ namespace upper_computer
                     {
                         string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
                         string[] result = trim.Split();
-                        gasSet[i] = new Gas();
-                        gasSet[i].name = result[0];
-                        gasSet[i].range = Convert.ToSingle(result[1]);
-                        gasSet[i].unit = result[2];
-                        gasSet[i].low_level_alarm = Convert.ToSingle(result[3]);
-                        gasSet[i].high_level_alarm = Convert.ToSingle(result[4]);
-                        
+                        gasSet[i] = new Gas
+                        {
+                            name = result[0],
+                            range = Convert.ToSingle(result[1]),
+                            unit = result[2],
+                            low_level_alarm = Convert.ToSingle(result[3]),
+                            high_level_alarm = Convert.ToSingle(result[4])
+                        };
+
                     }
                 }
 
@@ -425,34 +427,11 @@ namespace upper_computer
 
                 button6.Enabled = true;
                 button7.Enabled = true;
+                button8.Enabled = true;
             }
         }
 
         //初始化DataSet，加入dt表并初始化结构
-        private void initDataSet()
-        {
-            dataSet1.Clear();
-            dataSet1.Tables.Add(dt);
-            DataColumn dc1 = new DataColumn("id", Type.GetType("System.Int32"), "");//创建第一列
-            DataColumn dc2 = new DataColumn("date", Type.GetType("System.String"), "");//创建第二列
-            DataColumn dc3 = new DataColumn("time", Type.GetType("System.String"), "");//创建第三列
-            DataColumn dc4 = new DataColumn("gas1", Type.GetType("System.Decimal"), "");//创建第四列
-            DataColumn dc5 = new DataColumn("gas2", Type.GetType("System.Decimal"), "");//创建第五列
-            DataColumn dc6 = new DataColumn("gas3", Type.GetType("System.Decimal"), "");//创建第六列
-            DataColumn dc7 = new DataColumn("gas4", Type.GetType("System.Decimal"), "");//创建第七列
-            DataColumn dc8 = new DataColumn("gas5", Type.GetType("System.Decimal"), "");//创建第八列
-            DataColumn dc9 = new DataColumn("gas6", Type.GetType("System.Decimal"), "");//创建第九列
-            dt.Columns.Add(dc1);//向DataTable中添加一列
-            dt.Columns.Add(dc2);//向DataTable中添加一列
-            dt.Columns.Add(dc3);//向DataTable中添加一列
-            dt.Columns.Add(dc4);//向DataTable中添加一列
-            dt.Columns.Add(dc5);//向DataTable中添加一列
-            dt.Columns.Add(dc6);//向DataTable中添加一列
-            dt.Columns.Add(dc7);//向DataTable中添加一列
-            dt.Columns.Add(dc8);//向DataTable中添加一列
-            dt.Columns.Add(dc9);//向DataTable中添加一列
-        }
-
         private void initDataSet(int number)
         {
             dataSet1.Tables.Clear();
@@ -469,27 +448,6 @@ namespace upper_computer
 
 
         //初始化DateDt表结构
-        private void initDateDt()
-        {
-            dateDt.Clear();
-            DataColumn dc1 = new DataColumn("id", Type.GetType("System.Int32"), "");//创建第一列
-            DataColumn dc2 = new DataColumn("date", Type.GetType("System.DateTime"), "");//创建第二列
-            DataColumn dc3 = new DataColumn("gas1", Type.GetType("System.Decimal"), "");//创建第三列
-            DataColumn dc4 = new DataColumn("gas2", Type.GetType("System.Decimal"), "");//创建第四列
-            DataColumn dc5 = new DataColumn("gas3", Type.GetType("System.Decimal"), "");//创建第五列
-            DataColumn dc6 = new DataColumn("gas4", Type.GetType("System.Decimal"), "");//创建第六列
-            DataColumn dc7 = new DataColumn("gas5", Type.GetType("System.Decimal"), "");//创建第七列
-            DataColumn dc8 = new DataColumn("gas6", Type.GetType("System.Decimal"), "");//创建第八列
-            dateDt.Columns.Add(dc1);//向DataTable中添加一列
-            dateDt.Columns.Add(dc2);//向DataTable中添加一列
-            dateDt.Columns.Add(dc3);//向DataTable中添加一列
-            dateDt.Columns.Add(dc4);//向DataTable中添加一列
-            dateDt.Columns.Add(dc5);//向DataTable中添加一列
-            dateDt.Columns.Add(dc6);//向DataTable中添加一列
-            dateDt.Columns.Add(dc7);//向DataTable中添加一列
-            dateDt.Columns.Add(dc8);//向DataTable中添加一列
-        }
-
         private void initDateDt(int number)
         {
             dateDt.Columns.Clear();
@@ -500,7 +458,6 @@ namespace upper_computer
                 dateDt.Columns.Add(new DataColumn(gasSet[i].name, Type.GetType("System.Decimal"), ""));
             }
         }
-
 
         //向DateSet里添加一行数据
         private void addDataSet(string[] s, float[] f, int row)
@@ -728,6 +685,12 @@ namespace upper_computer
             dtFormat.ShortDatePattern = "yyyy-MM-dd HH:mm:ss";
             DateTime dt = Convert.ToDateTime(s, dtFormat);
             return dt;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Form3 f3 = new Form3(dateDt, gasSet, startDate, endDate);
+            f3.Show();
         }
     }
 }
