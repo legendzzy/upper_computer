@@ -68,23 +68,22 @@
             this.dataSet1 = new System.Data.DataSet();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.button4 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.panel9 = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -98,11 +97,11 @@
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            this.panel9.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.AutoSize = true;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.comboBox2);
             this.panel1.Controls.Add(this.comboBox3);
@@ -117,148 +116,160 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(13, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(180, 216);
+            this.panel1.Size = new System.Drawing.Size(180, 260);
             this.panel1.TabIndex = 0;
             // 
             // comboBox2
             // 
+            this.comboBox2.Font = new System.Drawing.Font("宋体", 11F);
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(67, 50);
+            this.comboBox2.Location = new System.Drawing.Point(67, 52);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(90, 20);
+            this.comboBox2.Size = new System.Drawing.Size(90, 23);
             this.comboBox2.TabIndex = 10;
             // 
             // comboBox3
             // 
+            this.comboBox3.Font = new System.Drawing.Font("宋体", 11F);
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(67, 85);
+            this.comboBox3.Items.AddRange(new object[] {
+            "8",
+            "7"});
+            this.comboBox3.Location = new System.Drawing.Point(67, 92);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(90, 20);
+            this.comboBox3.Size = new System.Drawing.Size(90, 23);
             this.comboBox3.TabIndex = 9;
             // 
             // comboBox5
             // 
+            this.comboBox5.Font = new System.Drawing.Font("宋体", 11F);
             this.comboBox5.FormattingEnabled = true;
             this.comboBox5.Items.AddRange(new object[] {
             "1",
+            "1.5",
             "2"});
-            this.comboBox5.Location = new System.Drawing.Point(67, 155);
+            this.comboBox5.Location = new System.Drawing.Point(67, 172);
             this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(90, 20);
+            this.comboBox5.Size = new System.Drawing.Size(90, 23);
             this.comboBox5.TabIndex = 8;
             // 
             // comboBox4
             // 
+            this.comboBox4.Font = new System.Drawing.Font("宋体", 11F);
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Items.AddRange(new object[] {
             "NONE",
             "EVEN",
             "ODD"});
-            this.comboBox4.Location = new System.Drawing.Point(67, 120);
+            this.comboBox4.Location = new System.Drawing.Point(67, 132);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(90, 20);
+            this.comboBox4.Size = new System.Drawing.Size(90, 23);
             this.comboBox4.TabIndex = 7;
             // 
             // comboBox1
             // 
+            this.comboBox1.Font = new System.Drawing.Font("宋体", 11F);
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(67, 15);
+            this.comboBox1.Location = new System.Drawing.Point(67, 12);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(90, 20);
+            this.comboBox1.Size = new System.Drawing.Size(90, 23);
             this.comboBox1.TabIndex = 6;
             // 
             // button1
             // 
-            this.button1.Font = new System.Drawing.Font("宋体", 10F);
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.Font = new System.Drawing.Font("宋体", 12F);
             this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(40, 185);
+            this.button1.Location = new System.Drawing.Point(40, 215);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 25);
+            this.button1.Size = new System.Drawing.Size(90, 30);
             this.button1.TabIndex = 5;
             this.button1.Text = "打开串口";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 10F);
-            this.label5.Location = new System.Drawing.Point(12, 155);
+            this.label5.Font = new System.Drawing.Font("宋体", 12F);
+            this.label5.Location = new System.Drawing.Point(12, 175);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 14);
+            this.label5.Size = new System.Drawing.Size(56, 16);
             this.label5.TabIndex = 4;
             this.label5.Text = "停止位";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 10F);
-            this.label4.Location = new System.Drawing.Point(12, 120);
+            this.label4.Font = new System.Drawing.Font("宋体", 12F);
+            this.label4.Location = new System.Drawing.Point(12, 135);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(49, 14);
+            this.label4.Size = new System.Drawing.Size(56, 16);
             this.label4.TabIndex = 3;
             this.label4.Text = "校验位";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 10F);
-            this.label3.Location = new System.Drawing.Point(12, 85);
+            this.label3.Font = new System.Drawing.Font("宋体", 12F);
+            this.label3.Location = new System.Drawing.Point(12, 95);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 14);
+            this.label3.Size = new System.Drawing.Size(56, 16);
             this.label3.TabIndex = 2;
             this.label3.Text = "数据位";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("宋体", 10F);
-            this.label2.Location = new System.Drawing.Point(12, 50);
+            this.label2.Font = new System.Drawing.Font("宋体", 12F);
+            this.label2.Location = new System.Drawing.Point(12, 55);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 14);
+            this.label2.Size = new System.Drawing.Size(56, 16);
             this.label2.TabIndex = 1;
             this.label2.Text = "波特率";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("宋体", 10F);
+            this.label1.Font = new System.Drawing.Font("宋体", 12F);
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 14);
+            this.label1.Size = new System.Drawing.Size(56, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "串  口";
             // 
             // panel2
             // 
+            this.panel2.AutoSize = true;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.checkBox1);
             this.panel2.Controls.Add(this.radioButton2);
             this.panel2.Controls.Add(this.radioButton1);
-            this.panel2.Location = new System.Drawing.Point(13, 235);
+            this.panel2.Location = new System.Drawing.Point(13, 295);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(180, 111);
+            this.panel2.Size = new System.Drawing.Size(180, 148);
             this.panel2.TabIndex = 1;
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("宋体", 10F);
-            this.button3.Location = new System.Drawing.Point(39, 79);
+            this.button3.BackColor = System.Drawing.SystemColors.Control;
+            this.button3.Font = new System.Drawing.Font("宋体", 12F);
+            this.button3.Location = new System.Drawing.Point(39, 95);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 25);
+            this.button3.Size = new System.Drawing.Size(90, 30);
             this.button3.TabIndex = 3;
             this.button3.Text = "清空接收";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("宋体", 10F);
-            this.checkBox1.Location = new System.Drawing.Point(15, 45);
+            this.checkBox1.Font = new System.Drawing.Font("宋体", 12F);
+            this.checkBox1.Location = new System.Drawing.Point(15, 55);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(138, 18);
+            this.checkBox1.Size = new System.Drawing.Size(155, 20);
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "显示数据接收时间";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -266,10 +277,10 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Font = new System.Drawing.Font("Consolas", 10F);
+            this.radioButton2.Font = new System.Drawing.Font("Consolas", 12F);
             this.radioButton2.Location = new System.Drawing.Point(110, 15);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(50, 21);
+            this.radioButton2.Size = new System.Drawing.Size(54, 23);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "HEX";
@@ -279,10 +290,10 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Font = new System.Drawing.Font("Consolas", 10F);
+            this.radioButton1.Font = new System.Drawing.Font("Consolas", 12F);
             this.radioButton1.Location = new System.Drawing.Point(15, 15);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(58, 21);
+            this.radioButton1.Size = new System.Drawing.Size(61, 23);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "ASCⅡ";
@@ -296,27 +307,27 @@
             this.panel3.Controls.Add(this.checkBox2);
             this.panel3.Controls.Add(this.radioButton4);
             this.panel3.Controls.Add(this.radioButton3);
-            this.panel3.Location = new System.Drawing.Point(12, 352);
+            this.panel3.Location = new System.Drawing.Point(13, 466);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(181, 107);
+            this.panel3.Size = new System.Drawing.Size(181, 141);
             this.panel3.TabIndex = 2;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("Times New Roman", 9F);
+            this.numericUpDown1.Font = new System.Drawing.Font("Times New Roman", 11F);
             this.numericUpDown1.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown1.Location = new System.Drawing.Point(106, 78);
+            this.numericUpDown1.Location = new System.Drawing.Point(106, 92);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(70, 21);
+            this.numericUpDown1.Size = new System.Drawing.Size(60, 24);
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.Value = new decimal(new int[] {
             1000,
@@ -327,34 +338,36 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
+            this.checkBox3.BackColor = System.Drawing.SystemColors.Control;
             this.checkBox3.Enabled = false;
-            this.checkBox3.Font = new System.Drawing.Font("宋体", 10F);
-            this.checkBox3.Location = new System.Drawing.Point(15, 79);
+            this.checkBox3.Font = new System.Drawing.Font("宋体", 12F);
+            this.checkBox3.Location = new System.Drawing.Point(15, 95);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(82, 18);
+            this.checkBox3.Size = new System.Drawing.Size(91, 20);
             this.checkBox3.TabIndex = 3;
             this.checkBox3.Text = "自动发送";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.UseVisualStyleBackColor = false;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Font = new System.Drawing.Font("宋体", 10F);
-            this.checkBox2.Location = new System.Drawing.Point(15, 46);
+            this.checkBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBox2.Font = new System.Drawing.Font("宋体", 12F);
+            this.checkBox2.Location = new System.Drawing.Point(15, 55);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(82, 18);
+            this.checkBox2.Size = new System.Drawing.Size(91, 20);
             this.checkBox2.TabIndex = 2;
             this.checkBox2.Text = "发送新行";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.UseVisualStyleBackColor = false;
             // 
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Font = new System.Drawing.Font("Consolas", 10F);
-            this.radioButton4.Location = new System.Drawing.Point(110, 13);
+            this.radioButton4.Font = new System.Drawing.Font("Consolas", 12F);
+            this.radioButton4.Location = new System.Drawing.Point(110, 15);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(50, 21);
+            this.radioButton4.Size = new System.Drawing.Size(54, 23);
             this.radioButton4.TabIndex = 1;
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "HEX";
@@ -364,10 +377,10 @@
             // 
             this.radioButton3.AutoSize = true;
             this.radioButton3.Checked = true;
-            this.radioButton3.Font = new System.Drawing.Font("Consolas", 10F);
-            this.radioButton3.Location = new System.Drawing.Point(15, 13);
+            this.radioButton3.Font = new System.Drawing.Font("Consolas", 12F);
+            this.radioButton3.Location = new System.Drawing.Point(15, 15);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(58, 21);
+            this.radioButton3.Size = new System.Drawing.Size(61, 23);
             this.radioButton3.TabIndex = 0;
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "ASCⅡ";
@@ -375,51 +388,57 @@
             // 
             // panel4
             // 
+            this.panel4.AutoSize = true;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel4.Controls.Add(this.textBox1);
-            this.panel4.Location = new System.Drawing.Point(211, 13);
+            this.panel4.Location = new System.Drawing.Point(199, 14);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(274, 216);
+            this.panel4.Size = new System.Drawing.Size(266, 259);
             this.panel4.TabIndex = 3;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(3, 3);
+            this.textBox1.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.textBox1.Location = new System.Drawing.Point(3, 2);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(269, 207);
+            this.textBox1.Size = new System.Drawing.Size(256, 250);
             this.textBox1.TabIndex = 0;
             // 
             // panel5
             // 
+            this.panel5.AutoSize = true;
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel5.Controls.Add(this.button2);
             this.panel5.Controls.Add(this.textBox2);
-            this.panel5.Location = new System.Drawing.Point(211, 235);
+            this.panel5.Location = new System.Drawing.Point(199, 295);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(274, 224);
+            this.panel5.Size = new System.Drawing.Size(266, 311);
             this.panel5.TabIndex = 4;
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.SystemColors.Control;
             this.button2.Enabled = false;
             this.button2.Font = new System.Drawing.Font("宋体", 12F);
-            this.button2.Location = new System.Drawing.Point(89, 130);
+            this.button2.Location = new System.Drawing.Point(91, 262);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 32);
+            this.button2.Size = new System.Drawing.Size(90, 30);
             this.button2.TabIndex = 1;
             this.button2.Text = "发送数据";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox2
             // 
+            this.textBox2.BackColor = System.Drawing.SystemColors.HighlightText;
             this.textBox2.Location = new System.Drawing.Point(3, 3);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(269, 114);
+            this.textBox2.Size = new System.Drawing.Size(256, 238);
             this.textBox2.TabIndex = 0;
             // 
             // serialPort1
@@ -428,13 +447,14 @@
             // 
             // panel6
             // 
+            this.panel6.AutoSize = true;
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel6.Controls.Add(this.label8);
             this.panel6.Controls.Add(this.label7);
             this.panel6.Controls.Add(this.label6);
-            this.panel6.Location = new System.Drawing.Point(12, 479);
+            this.panel6.Location = new System.Drawing.Point(12, 632);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(473, 37);
+            this.panel6.Size = new System.Drawing.Size(448, 37);
             this.panel6.TabIndex = 5;
             // 
             // label8
@@ -474,26 +494,32 @@
             // 
             // panel7
             // 
+            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel7.Controls.Add(this.dataGridView1);
-            this.panel7.Location = new System.Drawing.Point(507, 14);
+            this.panel7.Location = new System.Drawing.Point(466, 14);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(500, 502);
+            this.panel7.Size = new System.Drawing.Size(631, 703);
             this.panel7.TabIndex = 6;
             // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.HighlightText;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGridView1.ColumnHeadersHeight = 25;
             this.dataGridView1.Location = new System.Drawing.Point(3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 30;
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(490, 493);
+            this.dataGridView1.Size = new System.Drawing.Size(623, 694);
             this.dataGridView1.TabIndex = 0;
             // 
             // dataSet1
@@ -506,67 +532,72 @@
             // 
             // panel8
             // 
+            this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel8.AutoSize = true;
+            this.panel8.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel8.Controls.Add(this.label13);
             this.panel8.Controls.Add(this.button7);
             this.panel8.Controls.Add(this.button5);
-            this.panel8.Controls.Add(this.label13);
             this.panel8.Controls.Add(this.label12);
             this.panel8.Controls.Add(this.numericUpDown3);
             this.panel8.Controls.Add(this.numericUpDown2);
             this.panel8.Controls.Add(this.label11);
             this.panel8.Controls.Add(this.comboBox6);
-            this.panel8.Controls.Add(this.button6);
             this.panel8.Controls.Add(this.label10);
+            this.panel8.Controls.Add(this.button6);
             this.panel8.Controls.Add(this.label9);
             this.panel8.Controls.Add(this.dateTimePicker2);
-            this.panel8.Controls.Add(this.dateTimePicker1);
             this.panel8.Controls.Add(this.button4);
-            this.panel8.Location = new System.Drawing.Point(1013, 14);
+            this.panel8.Controls.Add(this.dateTimePicker1);
+            this.panel8.Location = new System.Drawing.Point(1100, 14);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(215, 422);
+            this.panel8.Size = new System.Drawing.Size(246, 524);
             this.panel8.TabIndex = 7;
-            // 
-            // button7
-            // 
-            this.button7.Enabled = false;
-            this.button7.Font = new System.Drawing.Font("宋体", 12F);
-            this.button7.Location = new System.Drawing.Point(56, 375);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(96, 28);
-            this.button7.TabIndex = 14;
-            this.button7.Text = "统计图显示";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button5
-            // 
-            this.button5.Enabled = false;
-            this.button5.Font = new System.Drawing.Font("宋体", 12F);
-            this.button5.Location = new System.Drawing.Point(56, 275);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(96, 28);
-            this.button5.TabIndex = 13;
-            this.button5.Text = "复位";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("宋体", 10F);
-            this.label13.Location = new System.Drawing.Point(3, 145);
+            this.label13.Font = new System.Drawing.Font("宋体", 12F);
+            this.label13.Location = new System.Drawing.Point(3, 175);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(35, 14);
+            this.label13.Size = new System.Drawing.Size(40, 16);
             this.label13.TabIndex = 12;
             this.label13.Text = "上限";
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.SystemColors.Control;
+            this.button7.Enabled = false;
+            this.button7.Font = new System.Drawing.Font("宋体", 12F);
+            this.button7.Location = new System.Drawing.Point(65, 450);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(100, 30);
+            this.button7.TabIndex = 14;
+            this.button7.Text = "统计图显示";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.SystemColors.Control;
+            this.button5.Enabled = false;
+            this.button5.Font = new System.Drawing.Font("宋体", 12F);
+            this.button5.Location = new System.Drawing.Point(70, 390);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(90, 30);
+            this.button5.TabIndex = 13;
+            this.button5.Text = "复位";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("宋体", 10F);
-            this.label12.Location = new System.Drawing.Point(3, 185);
+            this.label12.Font = new System.Drawing.Font("宋体", 12F);
+            this.label12.Location = new System.Drawing.Point(3, 225);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(35, 14);
+            this.label12.Size = new System.Drawing.Size(40, 16);
             this.label12.TabIndex = 11;
             this.label12.Text = "下限";
             // 
@@ -574,148 +605,145 @@
             // 
             this.numericUpDown3.DecimalPlaces = 1;
             this.numericUpDown3.Enabled = false;
-            this.numericUpDown3.Font = new System.Drawing.Font("Times New Roman", 10F);
-            this.numericUpDown3.Location = new System.Drawing.Point(67, 180);
+            this.numericUpDown3.Font = new System.Drawing.Font("Times New Roman", 11F);
+            this.numericUpDown3.Location = new System.Drawing.Point(80, 220);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(60, 23);
+            this.numericUpDown3.Size = new System.Drawing.Size(60, 24);
             this.numericUpDown3.TabIndex = 10;
             // 
             // numericUpDown2
             // 
             this.numericUpDown2.DecimalPlaces = 1;
             this.numericUpDown2.Enabled = false;
-            this.numericUpDown2.Font = new System.Drawing.Font("Times New Roman", 10F);
-            this.numericUpDown2.Location = new System.Drawing.Point(67, 140);
+            this.numericUpDown2.Font = new System.Drawing.Font("Times New Roman", 11F);
+            this.numericUpDown2.Location = new System.Drawing.Point(80, 170);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(60, 23);
+            this.numericUpDown2.Size = new System.Drawing.Size(60, 24);
             this.numericUpDown2.TabIndex = 9;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("宋体", 10F);
-            this.label11.Location = new System.Drawing.Point(3, 105);
+            this.label11.Font = new System.Drawing.Font("宋体", 12F);
+            this.label11.Location = new System.Drawing.Point(3, 125);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(63, 14);
+            this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 8;
             this.label11.Text = "选择对象";
             // 
             // comboBox6
             // 
-            this.comboBox6.Font = new System.Drawing.Font("Times New Roman", 10F);
+            this.comboBox6.Font = new System.Drawing.Font("Times New Roman", 11F);
             this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(67, 100);
+            this.comboBox6.Location = new System.Drawing.Point(80, 120);
             this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(60, 23);
+            this.comboBox6.Size = new System.Drawing.Size(60, 25);
             this.comboBox6.TabIndex = 7;
             this.comboBox6.SelectedIndexChanged += new System.EventHandler(this.comboBox6_SelectedIndexChanged);
-            // 
-            // button6
-            // 
-            this.button6.Enabled = false;
-            this.button6.Font = new System.Drawing.Font("宋体", 12F);
-            this.button6.Location = new System.Drawing.Point(56, 225);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(96, 28);
-            this.button6.TabIndex = 6;
-            this.button6.Text = "筛选";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("宋体", 10F);
-            this.label10.Location = new System.Drawing.Point(3, 65);
+            this.label10.Font = new System.Drawing.Font("宋体", 12F);
+            this.label10.Location = new System.Drawing.Point(3, 75);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(63, 14);
+            this.label10.Size = new System.Drawing.Size(72, 16);
             this.label10.TabIndex = 5;
             this.label10.Text = "终止时间";
+            // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.SystemColors.Control;
+            this.button6.Enabled = false;
+            this.button6.Font = new System.Drawing.Font("宋体", 12F);
+            this.button6.Location = new System.Drawing.Point(70, 330);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(90, 30);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "筛选";
+            this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("宋体", 10F);
+            this.label9.Font = new System.Drawing.Font("宋体", 12F);
             this.label9.Location = new System.Drawing.Point(3, 25);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 14);
+            this.label9.Size = new System.Drawing.Size(72, 16);
             this.label9.TabIndex = 4;
             this.label9.Text = "起始时间";
             // 
             // dateTimePicker2
             // 
             this.dateTimePicker2.CustomFormat = "yyyy-MM-dd HH:mm:ss";
-            this.dateTimePicker2.Font = new System.Drawing.Font("Times New Roman", 10F);
+            this.dateTimePicker2.Font = new System.Drawing.Font("Times New Roman", 11F);
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker2.Location = new System.Drawing.Point(67, 20);
+            this.dateTimePicker2.Location = new System.Drawing.Point(80, 20);
             this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(142, 23);
+            this.dateTimePicker2.Size = new System.Drawing.Size(156, 24);
             this.dateTimePicker2.TabIndex = 3;
+            // 
+            // button4
+            // 
+            this.button4.BackColor = System.Drawing.SystemColors.Control;
+            this.button4.Font = new System.Drawing.Font("宋体", 12F);
+            this.button4.Location = new System.Drawing.Point(70, 270);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(90, 30);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "导入";
+            this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // dateTimePicker1
             // 
             this.dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm:ss";
-            this.dateTimePicker1.Font = new System.Drawing.Font("Times New Roman", 10F);
+            this.dateTimePicker1.Font = new System.Drawing.Font("Times New Roman", 11F);
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(67, 60);
+            this.dateTimePicker1.Location = new System.Drawing.Point(80, 70);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(142, 23);
+            this.dateTimePicker1.Size = new System.Drawing.Size(156, 24);
             this.dateTimePicker1.TabIndex = 2;
-            // 
-            // button4
-            // 
-            this.button4.Font = new System.Drawing.Font("宋体", 12F);
-            this.button4.Location = new System.Drawing.Point(56, 325);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(96, 28);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "导入";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button8
-            // 
-            this.button8.Enabled = false;
-            this.button8.Font = new System.Drawing.Font("宋体", 12F);
-            this.button8.Location = new System.Drawing.Point(56, 21);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(96, 28);
-            this.button8.TabIndex = 15;
-            this.button8.Text = "报警分析";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // panel9
+            // button8
             // 
-            this.panel9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel9.Controls.Add(this.button8);
-            this.panel9.Location = new System.Drawing.Point(1013, 442);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(211, 74);
-            this.panel9.TabIndex = 16;
+            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button8.BackColor = System.Drawing.SystemColors.Control;
+            this.button8.Enabled = false;
+            this.button8.Font = new System.Drawing.Font("宋体", 12F);
+            this.button8.Location = new System.Drawing.Point(1172, 570);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(90, 30);
+            this.button8.TabIndex = 15;
+            this.button8.Text = "报警分析";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1234, 527);
-            this.Controls.Add(this.panel9);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.panel8);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel6);
@@ -747,8 +775,8 @@
             this.panel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            this.panel9.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -807,9 +835,8 @@
         private System.Windows.Forms.ComboBox comboBox6;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Button button8;
     }
 }
 

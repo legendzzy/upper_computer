@@ -42,17 +42,18 @@ namespace upper_computer
         private DataTable currentDt = new DataTable(); //当前数据，传到图标处理
         private int gas_number = 0; //气体数量
         private Gas[] gasSet = new Gas[6];
-        
+
+
         public Form1()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            int i;
             //单个添加
-            for (i = 300; i <= 38400; i = i*2)
+            for (int i = 300; i <= 38400; i = i*2)
             {
                 comboBox2.Items.Add(i.ToString());  //添加波特率列表
             }
@@ -65,18 +66,10 @@ namespace upper_computer
 
             //设置默认值
             //comboBox1.Text = "COM1";
-            comboBox2.Text = "115200";
+            comboBox2.Text = "9600";
             comboBox3.Text = "8";
             comboBox4.Text = "None";
-            comboBox5.Text = "1";
-
-            //string[] gaslist = { "all", "gas1", "gas2", "gas3", "gas4", "gas5", "gas6" };
-            comboBox6.Items.Add("all");
-            comboBox6.Text = "all";
-
-            //initDataSet();
-            //initDateDt();//初始化DateDt表，表结构确定
-            //currentDt = dateDt.Clone(); //Clone()复制表的结构
+            comboBox5.Text = "1";            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -308,127 +301,141 @@ namespace upper_computer
         //导入文件       
         private void button4_Click(object sender, EventArgs e)
         {
-            DateTime datetime = new DateTime();
-            rownumber = 0;
-            openFileDialog1.Filter = "*.txt|*.txt|所有文件|*.*";
-            
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            try
             {
-                dt.Rows.Clear();
-                dateDt.Rows.Clear();
-                
-                dataGridView1.DataSource = null;
-                filename = System.IO.Path.GetFullPath(openFileDialog1.FileName);
-                StreamReader sr = new StreamReader(filename);
-                string string1 = "";
-                
-                for(int i = 0; i < 6; i++)
+                DateTime datetime = new DateTime();
+                rownumber = 0;
+                openFileDialog1.Filter = "*.txt|*.txt|所有文件|*.*";
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    string1 = sr.ReadLine();
-                    if (string.IsNullOrWhiteSpace(string1))
-                        break;
-                    else
+                    dt.Rows.Clear();
+                    dateDt.Rows.Clear();
+                    dataGridView1.DataSource = null;
+                    comboBox6.Items.Clear();
+                    comboBox6.Items.Add("all");
+                    comboBox6.Text = "all";
+
+
+                    filename = System.IO.Path.GetFullPath(openFileDialog1.FileName);
+                    StreamReader sr = new StreamReader(filename);
+                    string string1 = "";
+
+                    for (int i = 0; i < 6; i++)
                     {
+                        string1 = sr.ReadLine();
+                        if (string.IsNullOrWhiteSpace(string1))
+                            break;
+                        else
+                        {
+                            string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
+                            string[] result = trim.Split();
+                            gasSet[i] = new Gas
+                            {
+                                name = result[0],
+                                range = Convert.ToSingle(result[1]),
+                                unit = result[2],
+                                low_level_alarm = Convert.ToSingle(result[3]),
+                                high_level_alarm = Convert.ToSingle(result[4])
+                            };
+
+                        }
+                    }
+
+                    while ((string1 = sr.ReadLine()) != null)
+                    {
+                        if (string.IsNullOrWhiteSpace(string1))
+                            continue;
+
+                        rownumber++;
                         string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
                         string[] result = trim.Split();
-                        gasSet[i] = new Gas
-                        {
-                            name = result[0],
-                            range = Convert.ToSingle(result[1]),
-                            unit = result[2],
-                            low_level_alarm = Convert.ToSingle(result[3]),
-                            high_level_alarm = Convert.ToSingle(result[4])
-                        };
 
-                    }
-                }
-
-                while ((string1 = sr.ReadLine()) != null)
-                {
-                    if (string.IsNullOrWhiteSpace(string1))
-                        continue;
-
-                    rownumber++;
-                    string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
-                    string[] result = trim.Split();
-
-                    //当第一次读到数据时，获取气体数量，进行数据表初始化
-                    if(rownumber == 1)
-                    {
-                        gas_number = result.Length - 2;
-                        initDataSet(gas_number);
-                        initDateDt(gas_number);
-                        currentDt = dateDt.Clone();
-                        for ( int k = 0; k < gas_number; k++)
+                        //当第一次读到数据时，获取气体数量，进行数据表初始化
+                        if (rownumber == 1)
                         {
-                            //comboBox6.Items.Add("gas" + (k + 1).ToString());
-                            comboBox6.Items.Add(gasSet[k].name);
-                        }                      
-                    }
-
-                    //得到一行数据处理date_time[] + gas[]
-                    for (int j = 0; j < result.Length; j++)
-                    {
-                        if (j >= 2) //气体浓度
-                        {
-                            float fresult = Convert.ToSingle(result[j]);
-                            if (fresult == 3999)
-                                fresult = 100;
-                            gas[j - 2] = fresult;
-                            //textBox1.AppendText(fresult.ToString() + " ");
-                        }
-                        else if(j == 0) //日期
-                        {
-                            date_time[j] = "20" + result[j].Insert(2, "-");
-                            date_time[j] = date_time[j].Insert(7, "-");
-                        }
-                        else //时间
-                        {
-                            date_time[j] = result[j].Insert(2, ":");
-                            date_time[j] = date_time[j].Insert(5, ":");
+                            gas_number = result.Length - 2;
+                            initDataSet(gas_number);
+                            initDateDt(gas_number);
+                            currentDt = dateDt.Clone();
+                            for (int k = 0; k < gas_number; k++)
+                            {
+                                //comboBox6.Items.Add("gas" + (k + 1).ToString());
+                                comboBox6.Items.Add(gasSet[k].name);
+                            }
                         }
 
-                        string s = date_time[0] + " " + date_time[1];
-                        datetime = sToDate(s);
+                        //得到一行数据处理date_time[] + gas[]
+                        for (int j = 0; j < result.Length; j++)
+                        {
+                            if (j >= 2) //气体浓度
+                            {
+                                float fresult = Convert.ToSingle(result[j]);
+                                if (fresult == 3999)
+                                    fresult = 100;
+                                gas[j - 2] = fresult;
+                                //textBox1.AppendText(fresult.ToString() + " ");
+                            }
+                            else if (j == 0) //日期
+                            {
+                                date_time[j] = "20" + result[j].Insert(2, "-");
+                                date_time[j] = date_time[j].Insert(7, "-");
+                            }
+                            else //时间
+                            {
+                                date_time[j] = result[j].Insert(2, ":");
+                                date_time[j] = date_time[j].Insert(5, ":");
+                            }
 
+                            string s = date_time[0] + " " + date_time[1];
+                            datetime = sToDate(s);
+
+                        }
+                        //在此加入一行数据
+
+                        addDataSet(date_time, gas, rownumber);
+                        addDateDt(datetime, gas, rownumber);
+
+                        if (rownumber == 1) //获取起始时间
+                        {
+                            string s = date_time[0] + " " + date_time[1];
+                            startDate = sToDate(s);
+                            dateTimePicker2.Value = startDate;
+
+                        }
                     }
-                    //在此加入一行数据
+                    sr.Close();
+                    currentDt = dateDt;
 
-                    addDataSet(date_time, gas, rownumber);
-                    addDateDt(datetime, gas, rownumber);
+                    //获取终止时间
+                    string str = date_time[0] + " " + date_time[1];
+                    //DateTimeFormatInfo dtFormat1 = new DateTimeFormatInfo();
 
-                    if(rownumber == 1) //获取起始时间
+                    endDate = sToDate(str);
+                    dateTimePicker1.Value = endDate;
+
+                    dataGridView1.DataSource = dataSet1.Tables[0];
+                    for (int i = 0; i < dataGridView1.Columns.Count; i++)
                     {
-                        string s = date_time[0] + " " + date_time[1];
-                        startDate = sToDate(s);
-                        dateTimePicker2.Value = startDate;
-                        
+                        dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
+                    dataGridView1.Rows[0].Selected = false;
+
+                    button6.Enabled = true;
+                    button7.Enabled = true;
+                    button8.Enabled = true;
                 }
-                sr.Close();
-                currentDt = dateDt;
-
-                //获取终止时间
-                string str = date_time[0] + " " + date_time[1];
-                //DateTimeFormatInfo dtFormat1 = new DateTimeFormatInfo();
-
-                endDate = sToDate(str);
-                dateTimePicker1.Value = endDate;
-
-                dataGridView1.DataSource = dataSet1.Tables[0];
-                dataGridView1.Rows[0].Selected = false;
-
-                /*首列标号
-                 * for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                {
-                    dataGridView1.Rows[i].HeaderCell.Value = i.ToString();
-                }
-                */
-
-                button6.Enabled = true;
-                button7.Enabled = true;
-                button8.Enabled = true;
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("导入出错");
+                button5.Enabled = false;
+                button6.Enabled = false;
+                button7.Enabled = false;
+                button8.Enabled = false;
+            }
+
+            
         }
 
         //初始化DataSet，加入dt表并初始化结构
@@ -492,75 +499,84 @@ namespace upper_computer
         //筛选按钮
         private void button6_Click(object sender, EventArgs e)
         {
-            button5.Enabled = true; //启用复位
-
-            string end = dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss");
-            string start = dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss");
-            string[] endarr = end.Split(' ');
-            string[] startarr = start.Split(' ');
-            startDateTime[0] = startarr[0];
-            startDateTime[1] = startarr[1];
-            endDateTime[0] = endarr[0];
-            endDateTime[1] = endarr[1];
-
-            //当前显示页的数据表筛选
-            if(startDateTime[0].Equals(endDateTime[0])) //如果起始日期相同
+            try
             {
-                DataRow[] drArr = dt.Select("time>='" + startDateTime[1] + "' and time<='" + endDateTime[1] + "'"); // 日期相同，只用考虑起始时间
+                button5.Enabled = true; //启用复位
+
+                //选择的筛选起始时间和结束时间
+                string end = dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                string start = dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                string[] endarr = end.Split(' ');
+                string[] startarr = start.Split(' ');
+                startDateTime[0] = startarr[0];
+                startDateTime[1] = startarr[1];
+                endDateTime[0] = endarr[0];
+                endDateTime[1] = endarr[1];
+
+                if (sToDate(end) < sToDate(start))
+                    selectGas(dt.Clone());
+
+                //当前显示页的数据表筛选
+                else if (startDateTime[0].Equals(endDateTime[0])) //如果起始日期相同
+                {
+                    DataRow[] drArr = dt.Select("time>='" + startDateTime[1] + "' and time<='" + endDateTime[1] + "' and date='" + startDateTime[0] + "'"); // 日期相同，主要只用考虑起始时间，并且日期要匹配！
+
+                    //把一个表的数据复制到另一个表
+                    DataTable dtNew = dt.Clone();
+                    for (int i = 0; i < drArr.Length; i++)
+                    {
+                        dtNew.ImportRow(drArr[i]);
+                    }
+
+                    dtNew.DefaultView.Sort = "id ASC";
+                    dtNew = dtNew.DefaultView.ToTable();
+                    selectGas(dtNew);
+                }
+                else //如果起始日期不同
+                {
+                    DataRow[] drArr0 = dt.Select("date>'" + startDateTime[0] + "' and date<'" + endDateTime[0] + "'"); // 夹在左右日期之间的日期（不包含）
+                    DataRow[] drArr1 = dt.Select("date='" + startDateTime[0] + "' and time>='" + startDateTime[1] + "'"); //左边界日期，当天时间需大于起始时间
+                    DataRow[] drArr2 = dt.Select("date='" + endDateTime[0] + "' and time<='" + endDateTime[1] + "'"); //右边界日期，当天时间需小于结束时间   
+
+                    //把一个表的数据复制到另一个表
+                    DataTable dtNew = dt.Clone();
+                    for (int i = 0; i < drArr0.Length; i++)
+                    {
+                        dtNew.ImportRow(drArr0[i]);
+                    }
+                    for (int i = 0; i < drArr1.Length; i++)
+                    {
+                        dtNew.ImportRow(drArr1[i]);
+                    }
+                    for (int i = 0; i < drArr2.Length; i++)
+                    {
+                        dtNew.ImportRow(drArr2[i]);
+                    }
+
+                    dtNew.DefaultView.Sort = "id ASC";
+                    dtNew = dtNew.DefaultView.ToTable();
+                    selectGas(dtNew);
+                }
+
+
+                //要传输到图表的数据表的筛选
+                DataRow[] dr = dateDt.Select("date>='" + sToDate(start) + "' and date<='" + sToDate(end) + "'");
 
                 //把一个表的数据复制到另一个表
-                DataTable dtNew = dt.Clone();
-                for (int i = 0; i < drArr.Length; i++)
+                DataTable dtNew1 = dateDt.Clone();
+                for (int i = 0; i < dr.Length; i++)
                 {
-                    dtNew.ImportRow(drArr[i]);
+                    dtNew1.ImportRow(dr[i]);
                 }
-
-                dtNew.DefaultView.Sort = "id ASC";
-                dtNew = dtNew.DefaultView.ToTable();
-                selectGas(dtNew);
-                //dataGridView1.DataSource = dtNew;
+                dtNew1.DefaultView.Sort = "id ASC";
+                dtNew1 = dtNew1.DefaultView.ToTable();
+                selectGasDt(dtNew1);
             }
-            else //如果起始日期不同
+            catch(Exception ex)
             {
-                DataRow[] drArr0 = dt.Select("date>='" + startDateTime[0] + "' and date<='" + endDateTime[0] + "'"); // 日期不同，不用考虑时间对比
-                DataRow[] drArr1 = dt.Select("date='" + startDateTime[0] + "' and time>'" + startDateTime[1] + "'"); //左边界日期，当天时间需大于起始时间
-                DataRow[] drArr2 = dt.Select("date='" + endDateTime[0] + "' and time<'" + endDateTime[1] + "'"); //右边界日期，当天时间需小于结束时间   
-
-                //把一个表的数据复制到另一个表
-                DataTable dtNew = dt.Clone();
-                for (int i = 0; i < drArr0.Length; i++)
-                {
-                    dtNew.ImportRow(drArr0[i]);
-                }
-                for (int i = 0; i < drArr1.Length; i++)
-                {
-                    dtNew.ImportRow(drArr1[i]);
-                }
-                for (int i = 0; i < drArr2.Length; i++)
-                {
-                    dtNew.ImportRow(drArr2[i]);
-                }
-
-                dtNew.DefaultView.Sort = "id ASC";
-                dtNew = dtNew.DefaultView.ToTable();
-                selectGas(dtNew);
+                MessageBox.Show("输入异常");
             }
-
-
-            //要传输到图表的数据表的筛选
-            DataRow[] dr = dateDt.Select("date>='" + sToDate(start) + "' and date<='" + sToDate(end) + "'");
-
-            //把一个表的数据复制到另一个表
-            DataTable dtNew1 = dateDt.Clone();
-            for (int i = 0; i < dr.Length; i++)
-            {
-                dtNew1.ImportRow(dr[i]);
-            }
-            dtNew1.DefaultView.Sort = "id ASC";
-            dtNew1 = dtNew1.DefaultView.ToTable();
-            selectGasDt(dtNew1);
-
-            //dataGridView1.Rows[0].Selected = false;
+            
         }
 
         //传入日期筛选后的datatable，进行气体筛选，将结果复制到新表中绑定到dataGridView
@@ -573,6 +589,10 @@ namespace upper_computer
             if (gas.Equals("all"))
             {
                 dataGridView1.DataSource = datatable;
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
             }
             else
             {
@@ -587,6 +607,10 @@ namespace upper_computer
                 dtNew.DefaultView.Sort = "id ASC";
                 dtNew = dtNew.DefaultView.ToTable();
                 dataGridView1.DataSource = dtNew;
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
             }  
         }
 
@@ -667,6 +691,10 @@ namespace upper_computer
         private void button5_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = dt;
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            {
+                dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
             currentDt = dateDt;
             dateTimePicker1.Value = endDate;
             dateTimePicker2.Value = startDate;
@@ -675,8 +703,25 @@ namespace upper_computer
         //图表显示按钮
         private void button7_Click(object sender, EventArgs e)
         {
-            Form2 f2 = new Form2(currentDt, gasSet);
-            f2.Show();
+            try
+            {
+                if (comboBox6.SelectedIndex == 0)
+                {
+                    Form2 f2 = new Form2(currentDt, gasSet);
+                    f2.StartPosition = FormStartPosition.CenterScreen;
+                    f2.Show();
+                }
+                else
+                {
+                    Form2 f2 = new Form2(currentDt, gasSet, comboBox6.SelectedIndex - 1);
+                    f2.StartPosition = FormStartPosition.CenterScreen;
+                    f2.Show();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }    
         }
 
         //字符串转DateTime类
@@ -690,7 +735,10 @@ namespace upper_computer
         private void button8_Click(object sender, EventArgs e)
         {
             Form3 f3 = new Form3(dateDt, gasSet, startDate, endDate);
+            f3.StartPosition = FormStartPosition.CenterScreen;
             f3.Show();
         }
+
+       
     }
 }

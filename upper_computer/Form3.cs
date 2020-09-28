@@ -31,95 +31,109 @@ namespace upper_computer
             this.initEndTime = initEndTime;
         }
 
+        //确定按钮
         private void button1_Click(object sender, EventArgs e)
         {
-            gasIndex = comboBox1.SelectedIndex;
-            textBox1.Text = gasSet[gasIndex].low_level_alarm.ToString();
-            textBox2.Text = gasSet[gasIndex].high_level_alarm.ToString();
-            textBox3.Text = gasSet[gasIndex].unit;
-            textBox4.Text = gasSet[gasIndex].range.ToString();
-            label8.Text = gasSet[gasIndex].name;
-            DateTime startDt = dateTimePicker1.Value;
-            DateTime endDt = dateTimePicker2.Value;
-            float alarm;
-            string alarmText;
-            if (radioButton1.Checked)
+            try
             {
-                alarm = gasSet[gasIndex].low_level_alarm;
-                alarmText = radioButton1.Text;
-            }
-            else
-            {
-                alarm = gasSet[gasIndex].high_level_alarm;
-                alarmText = radioButton2.Text;
-            }
-
-            tableList.Clear();
-            DataRow[] dr = dataTable.Select("date>='" + startDt + "' and date<='" + endDt + "' and " + gasSet[gasIndex].name + ">=" + alarm);
-            
-            if (dr.Length == 0)
-            {
-                label8.Text =  gasSet[gasIndex].name + "在本时段内未找到符合条件的报警信息";
-                dataGridView1.DataSource = null;
-                button2.Enabled = false;
-                return;
-            }
-
-            button2.Enabled = true;
-            DataTable newDt = dataTable.Clone(); //newDt表为筛选后的信息表
-            for(int i = 0; i < dr.Length; i++)
-            {
-                newDt.ImportRow(dr[i]);
-            }
-            newDt.DefaultView.Sort = "id ASC";
-            newDt = newDt.DefaultView.ToTable();
-
-            //dataGridView1.DataSource = newDt;
-            //dataGridView1.Columns[1].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
-
-            DataTable currTable = dataTable.Clone();
-            currTable.ImportRow(newDt.Rows[0]); //先加入第一行数据
-            
-            if(dr.Length != 1)//多于一条数据
-            {
-                for (int i = 1; i < newDt.Rows.Count; i++)
+                //gasIndex = comboBox1.SelectedIndex;
+                //label10.Text = gasSet[gasIndex].low_level_alarm.ToString();
+                //label11.Text = gasSet[gasIndex].high_level_alarm.ToString();
+                //label12.Text = gasSet[gasIndex].unit;
+                //label13.Text = gasSet[gasIndex].range.ToString();
+                //label8.Text = gasSet[gasIndex].name;
+                DateTime startDt = dateTimePicker1.Value;
+                DateTime endDt = dateTimePicker2.Value;
+                float alarm;
+                string alarmText;
+                if (radioButton1.Checked)
                 {
-                    if((int)newDt.Rows[i]["id"] - (int)newDt.Rows[i - 1]["id"] < INTERVAL)
-                    {
-                        currTable.ImportRow(newDt.Rows[i]);
-                    }
-                    else //将当前table加入list中，并且清空该table重新记录下一个要加到list中的table
-                    {
-                        DataTable newTable = new DataTable();
-                        newTable = currTable.Copy();
-                        tableList.Add(newTable);
-                        currTable.Rows.Clear();
-                        currTable.ImportRow(newDt.Rows[i]);
-                    }
+                    alarm = gasSet[gasIndex].low_level_alarm;
+                    alarmText = radioButton1.Text;
                 }
-                DataTable newTable_end = new DataTable();
-                newTable_end = currTable.Copy();
-                tableList.Add(newTable_end); //将最后一个table加入list
+                else if (radioButton2.Checked)
+                {
+                    alarm = gasSet[gasIndex].high_level_alarm;
+                    alarmText = radioButton2.Text;
+                }
+                else
+                {
+                    alarm = (float)Convert.ToDecimal(textBox1.Text);
+                    alarmText = textBox1.Text + gasSet[gasIndex].unit;
+                }
+
+                tableList.Clear();
+                DataRow[] dr = dataTable.Select("date>='" + startDt + "' and date<='" + endDt + "' and " + gasSet[gasIndex].name + ">=" + alarm);
+
+                if (dr.Length == 0)
+                {
+                    label8.Text = gasSet[gasIndex].name + "在本时段内未找到符合条件的报警信息";
+                    dataGridView1.DataSource = null;
+                    button2.Enabled = false;
+                    return;
+                }
+
+                button2.Enabled = true;
+                DataTable newDt = dataTable.Clone(); //newDt表为筛选后的信息表
+                for (int i = 0; i < dr.Length; i++)
+                {
+                    newDt.ImportRow(dr[i]);
+                }
+                newDt.DefaultView.Sort = "id ASC";
+                newDt = newDt.DefaultView.ToTable();
+
+
+                DataTable currTable = dataTable.Clone();
+                currTable.ImportRow(newDt.Rows[0]); //先加入第一行数据
+
+                if (dr.Length != 1)//多于一条数据
+                {
+                    for (int i = 1; i < newDt.Rows.Count; i++)
+                    {
+                        if ((int)newDt.Rows[i]["id"] - (int)newDt.Rows[i - 1]["id"] < INTERVAL)
+                        {
+                            currTable.ImportRow(newDt.Rows[i]);
+                        }
+                        else //将当前table加入list中，并且清空该table重新记录下一个要加到list中的table
+                        {
+                            DataTable newTable = new DataTable();
+                            newTable = currTable.Copy();
+                            tableList.Add(newTable);
+                            currTable.Rows.Clear();
+                            currTable.ImportRow(newDt.Rows[i]);
+                        }
+                    }
+                    DataTable newTable_end = new DataTable();
+                    newTable_end = currTable.Copy();
+                    tableList.Add(newTable_end); //将最后一个table加入list
+                }
+                else //只有一条数据
+                {
+                    tableList.Add(currTable.Copy());
+                }
+
+
+                setAlarmTable(tableList, alarmTable, gasSet[gasIndex]);
+                alarmTable.DefaultView.Sort = "id ASC";
+                alarmTable = alarmTable.DefaultView.ToTable();
+                dataGridView1.DataSource = alarmTable;
+                dataGridView1.Columns[1].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
+                dataGridView1.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
+                dataGridView1.Columns[3].DefaultCellStyle.Format = "0.0";
+                dataGridView1.Columns[4].DefaultCellStyle.Format = "0.0";
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+                dataGridView1.Columns[0].Width = 45;
+                label8.Text = gasSet[gasIndex].name + " 共查询到" + tableList.Count + "条超过" + alarmText + "的时段记录,可选择一行显示统计图";
             }
-            else //只有一条数据
+            catch(Exception ex)
             {
-                tableList.Add(currTable.Copy());
+                MessageBox.Show("输入异常");
             }
+            
 
-
-            setAlarmTable(tableList, alarmTable, gasSet[gasIndex]);
-            alarmTable.DefaultView.Sort = "id ASC";
-            alarmTable = alarmTable.DefaultView.ToTable();
-            dataGridView1.DataSource = alarmTable;
-            dataGridView1.Columns[1].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
-            dataGridView1.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
-            dataGridView1.Columns[3].DefaultCellStyle.Format = "0.0";
-            dataGridView1.Columns[4].DefaultCellStyle.Format = "0.0";
-            dataGridView1.DefaultCellStyle.Font = new Font("宋体", 9);
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 10);
-            dataGridView1.Columns[4].Width = 20;
-            this.dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            label8.Text = gasSet[gasIndex].name + " 共查询到" + tableList.Count + "条超过" + alarmText + "时段记录,可选择一行进行统计图显示";
         }
 
         private void Form3_Load(object sender, EventArgs e)
@@ -136,6 +150,11 @@ namespace upper_computer
 
             //加载数据表
             initAlarmTable();
+
+            this.dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.DefaultCellStyle.Font = new Font("宋体", 9);
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 10);
+
         }
 
         private void setAlarmTable(List<DataTable> list, DataTable targetTable, Gas gas)
@@ -171,6 +190,12 @@ namespace upper_computer
         {
             if (comboBox1.Text != "")
                 button1.Enabled = true;
+            gasIndex = comboBox1.SelectedIndex;
+            label10.Text = gasSet[gasIndex].low_level_alarm.ToString();
+            label11.Text = gasSet[gasIndex].high_level_alarm.ToString();
+            label12.Text = gasSet[gasIndex].unit;
+            label13.Text = gasSet[gasIndex].range.ToString();
+            label8.Text = gasSet[gasIndex].name;
         }
 
         //统计图显示
@@ -180,7 +205,20 @@ namespace upper_computer
             int id = Convert.ToInt32(dataGridView1.Rows[rowIndex].Cells[0].Value);
             DataTable currTable = tableList[id - 1]; //要使用的数据表
             Form2 f2 = new Form2(currTable, gasSet, gasIndex);
+            f2.StartPosition = FormStartPosition.CenterScreen;
             f2.Show();
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton3.Checked)
+            {
+                textBox1.Enabled = true;
+            }
+            else
+            {
+                textBox1.Enabled = false;
+            }
         }
 
         private void initAlarmTable()

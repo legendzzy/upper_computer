@@ -30,9 +30,9 @@ namespace upper_computer
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,10 +66,12 @@ namespace upper_computer
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -78,43 +80,43 @@ namespace upper_computer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BackColor = System.Drawing.Color.AliceBlue;
-            chartArea1.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
-            chartArea1.AxisX.IsStartedFromZero = false;
-            chartArea1.AxisX.LabelStyle.Interval = 0D;
-            chartArea1.AxisX.LabelStyle.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Auto;
-            chartArea1.AxisX.ScrollBar.BackColor = System.Drawing.Color.WhiteSmoke;
-            chartArea1.AxisX.ScrollBar.ButtonColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            chartArea1.AxisY.IsStartedFromZero = false;
-            chartArea1.AxisY.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
+            chartArea3.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
+            chartArea3.AxisX.IsStartedFromZero = false;
+            chartArea3.AxisX.LabelStyle.Interval = 0D;
+            chartArea3.AxisX.LabelStyle.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Auto;
+            chartArea3.AxisX.ScrollBar.BackColor = System.Drawing.Color.WhiteSmoke;
+            chartArea3.AxisX.ScrollBar.ButtonColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            chartArea3.AxisY.IsStartedFromZero = false;
+            chartArea3.AxisY.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
             | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.StaggeredLabels) 
             | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
-            chartArea1.AxisY.LabelStyle.Interval = 0D;
-            chartArea1.AxisY.LabelStyle.IntervalOffset = 0D;
-            chartArea1.AxisY.Minimum = -5D;
-            chartArea1.BackColor = System.Drawing.SystemColors.Window;
-            chartArea1.BorderColor = System.Drawing.Color.Transparent;
-            chartArea1.CursorX.AutoScroll = false;
-            chartArea1.CursorX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
-            chartArea1.CursorX.IsUserEnabled = true;
-            chartArea1.CursorX.IsUserSelectionEnabled = true;
-            chartArea1.CursorX.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            chartArea1.CursorY.AutoScroll = false;
-            chartArea1.CursorY.Interval = 0.1D;
-            chartArea1.CursorY.IntervalOffset = 0.1D;
-            chartArea1.CursorY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            legend1.IsTextAutoFit = false;
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(0, 12);
+            chartArea3.AxisY.LabelStyle.Interval = 0D;
+            chartArea3.AxisY.LabelStyle.IntervalOffset = 0D;
+            chartArea3.AxisY.Minimum = -5D;
+            chartArea3.BackColor = System.Drawing.SystemColors.Window;
+            chartArea3.BorderColor = System.Drawing.Color.Transparent;
+            chartArea3.CursorX.AutoScroll = false;
+            chartArea3.CursorX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
+            chartArea3.CursorX.IsUserEnabled = true;
+            chartArea3.CursorX.IsUserSelectionEnabled = true;
+            chartArea3.CursorX.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            chartArea3.CursorY.AutoScroll = false;
+            chartArea3.CursorY.Interval = 0.1D;
+            chartArea3.CursorY.IntervalOffset = 0.1D;
+            chartArea3.CursorY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            legend3.IsTextAutoFit = false;
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
+            this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(1067, 625);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
+            this.chart1.Size = new System.Drawing.Size(1045, 624);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             this.chart1.GetToolTipText += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs>(this.chart1_GetToolTipText);
@@ -128,7 +130,7 @@ namespace upper_computer
             this.textBox1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Font = new System.Drawing.Font("Times New Roman", 11F);
-            this.textBox1.Location = new System.Drawing.Point(915, 5);
+            this.textBox1.Location = new System.Drawing.Point(897, 5);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(355, 17);
@@ -140,7 +142,7 @@ namespace upper_computer
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.label1.Font = new System.Drawing.Font("黑体", 12F);
-            this.label1.Location = new System.Drawing.Point(853, 4);
+            this.label1.Location = new System.Drawing.Point(835, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 16);
             this.label1.TabIndex = 2;
@@ -148,14 +150,13 @@ namespace upper_computer
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.AliceBlue;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.checkedListBox1);
-            this.panel1.Location = new System.Drawing.Point(1073, 12);
+            this.panel1.Location = new System.Drawing.Point(5, 10);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(197, 242);
             this.panel1.TabIndex = 3;
@@ -165,9 +166,9 @@ namespace upper_computer
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button2.Font = new System.Drawing.Font("黑体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(115, 187);
+            this.button2.Location = new System.Drawing.Point(105, 190);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(68, 25);
+            this.button2.Size = new System.Drawing.Size(70, 25);
             this.button2.TabIndex = 3;
             this.button2.Text = "全不选";
             this.button2.UseVisualStyleBackColor = false;
@@ -179,9 +180,9 @@ namespace upper_computer
             this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button1.Cursor = System.Windows.Forms.Cursors.Default;
             this.button1.Font = new System.Drawing.Font("黑体", 12F);
-            this.button1.Location = new System.Drawing.Point(13, 187);
+            this.button1.Location = new System.Drawing.Point(15, 190);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(68, 25);
+            this.button1.Size = new System.Drawing.Size(70, 25);
             this.button1.TabIndex = 2;
             this.button1.Text = "全选";
             this.button1.UseVisualStyleBackColor = false;
@@ -233,7 +234,7 @@ namespace upper_computer
             this.textBox2.Location = new System.Drawing.Point(88, 5);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(759, 17);
+            this.textBox2.Size = new System.Drawing.Size(741, 17);
             this.textBox2.TabIndex = 5;
             // 
             // panel2
@@ -243,14 +244,13 @@ namespace upper_computer
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 646);
+            this.panel2.Location = new System.Drawing.Point(0, 650);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1282, 31);
+            this.panel2.Size = new System.Drawing.Size(1264, 31);
             this.panel2.TabIndex = 6;
             // 
             // panel3
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.Color.AliceBlue;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Controls.Add(this.label24);
@@ -274,8 +274,9 @@ namespace upper_computer
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label4);
+            this.panel3.Cursor = System.Windows.Forms.Cursors.Default;
             this.panel3.Font = new System.Drawing.Font("黑体", 9F);
-            this.panel3.Location = new System.Drawing.Point(1073, 260);
+            this.panel3.Location = new System.Drawing.Point(5, 258);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(197, 330);
             this.panel3.TabIndex = 7;
@@ -491,16 +492,28 @@ namespace upper_computer
             this.label4.TabIndex = 0;
             this.label4.Text = "气体";
             // 
+            // panel4
+            // 
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel4.Controls.Add(this.chart1);
+            this.panel4.Location = new System.Drawing.Point(209, 10);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(1055, 634);
+            this.panel4.TabIndex = 8;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1282, 677);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.chart1);
             this.Name = "Form2";
             this.Text = "图表";
             this.Load += new System.EventHandler(this.Form2_Load);
@@ -511,6 +524,7 @@ namespace upper_computer
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -550,5 +564,6 @@ namespace upper_computer
         private Label label21;
         private Label label20;
         private Label label19;
+        private Panel panel4;
     }
 }

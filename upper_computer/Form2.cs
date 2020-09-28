@@ -15,7 +15,7 @@ namespace upper_computer
 {
     public partial class Form2 : Form
     {
-        private static int MAX_NUMBER = 100;
+        private static int MAX_NUMBER = 50;
         private DataTable datatable = new DataTable();
         //private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
         private DataPoint clickDp = null;
@@ -141,9 +141,9 @@ namespace upper_computer
             chart1.ChartAreas[0].AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
             chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = false;
             chart1.ChartAreas[0].AxisX.ScrollBar.Size = 14;
-            chart1.ChartAreas[0].AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Minutes; 
+            chart1.ChartAreas[0].AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Seconds; 
             chart1.ChartAreas[0].AxisX.ScaleView.SizeType = DateTimeIntervalType.Minutes;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 10;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = 5;
             chart1.ChartAreas[0].AxisX.ScaleView.MinSize = 2;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollSize = 10;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 5;
@@ -171,14 +171,14 @@ namespace upper_computer
             if (e.Delta > 0)//鼠标向上
             {
                 if (chart1.ChartAreas[0].AxisX.ScaleView.Size < MAX_NUMBER)//判断显示的最大数值
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 3;//+=5---滚动一次显示5个
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 2;//+=5---滚动一次显示5个
 
             }
             else//鼠标向下滚动
             {
-                if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 3)
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 3;// - = 5---滚动一次减小显示5个
-                else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 3)
+                if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 2)
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 2;// - = 5---滚动一次减小显示5个
+                else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 2)
                     chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
             }
         }
