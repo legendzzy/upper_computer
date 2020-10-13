@@ -26,23 +26,23 @@ namespace upper_computer
     {
         private long receive_count = 0; //接收字节计数, 作用相当于全局变量
         private long send_count = 0;    //发送字节计数
-        private StringBuilder sb = new StringBuilder();
         private DateTime current_time = new DateTime();
-        private string filename = "";
-        private string[] date_time = new string[2];
-        private float[] gas = new float[6] {0, 0, 0, 0, 0, 0};
-        DataTable dt = new DataTable("tableText");
-        private int rownumber = 0;
-        private DateTime startDate = new DateTime();
-        private DateTime endDate = new DateTime();
-        private DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
-        private string[] startDateTime = new string[2];
-        private string[] endDateTime= new string[2];
+        private string[] date_time = new string[2]; //文件中读取的日期+时间
+        private float[] gas = new float[6] {0, 0, 0, 0, 0, 0}; //储存一组气体数值
+        DataTable dt = new DataTable("tableText"); //该Form中的数据表
+        private int rownumber = 0; //读取的数据行数
+        private DateTime startDate = new DateTime(); //DateTime类型的起始时间，用于后续的form的数据处理
+        private DateTime endDate = new DateTime(); //DateTime类型的结束时间
+        private string[] startDateTime = new string[2]; //用于筛选的开始时间，数组形式存储日期+时间
+        private string[] endDateTime= new string[2]; //用于筛选的结束时间，数组形式存储日期+时间
         private DataTable dateDt = new DataTable(); //日期datatable，日期+时间仅占一列，方便数据传到图表
-        private DataTable currentDt = new DataTable(); //当前数据，传到图标处理
+        private DataTable currentDt = new DataTable(); //当前数据，传到统计图处理的Form中
         private int gas_number = 0; //气体数量
-        private Gas[] gasSet = new Gas[6];
+        private Gas[] gasSet = new Gas[6]; //储存气体信息的结构体的数组
+        private string filename = ""; //打开文件名
 
+        private DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
+        private StringBuilder sb = new StringBuilder();
 
         public Form1()
         {
@@ -69,7 +69,9 @@ namespace upper_computer
             comboBox2.Text = "9600";
             comboBox3.Text = "8";
             comboBox4.Text = "None";
-            comboBox5.Text = "1";            
+            comboBox5.Text = "1";
+
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 9);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -91,7 +93,6 @@ namespace upper_computer
                     label6.Text = "串口已关闭";
                     label6.ForeColor = Color.Red;
                     button2.Enabled = false;
-
                 }
                 else
                 {
@@ -165,7 +166,6 @@ namespace upper_computer
                 sb.Append(Encoding.ASCII.GetString(received_buf));
             }
             
-
             try
             {
                 this.Invoke((EventHandler)delegate
@@ -251,7 +251,6 @@ namespace upper_computer
                             num = textBox2.Text.Length;
                         }
                     }
-
                     send_count += num;
                     label8.Text = "Tx:" + send_count.ToString() + "Bytes";
                 }
@@ -315,12 +314,11 @@ namespace upper_computer
                     comboBox6.Items.Clear();
                     comboBox6.Items.Add("all");
                     comboBox6.Text = "all";
-
-
                     filename = System.IO.Path.GetFullPath(openFileDialog1.FileName);
                     StreamReader sr = new StreamReader(filename);
                     string string1 = "";
 
+                    //读取文件头，对气体的属性进行初始化，存储在gasSet中
                     for (int i = 0; i < 6; i++)
                     {
                         string1 = sr.ReadLine();
@@ -338,7 +336,6 @@ namespace upper_computer
                                 low_level_alarm = Convert.ToSingle(result[3]),
                                 high_level_alarm = Convert.ToSingle(result[4])
                             };
-
                         }
                     }
 
@@ -346,7 +343,6 @@ namespace upper_computer
                     {
                         if (string.IsNullOrWhiteSpace(string1))
                             continue;
-
                         rownumber++;
                         string trim = Regex.Replace(string1.Trim(), "\\s{2,}", " ");
                         string[] result = trim.Split();
@@ -360,7 +356,6 @@ namespace upper_computer
                             currentDt = dateDt.Clone();
                             for (int k = 0; k < gas_number; k++)
                             {
-                                //comboBox6.Items.Add("gas" + (k + 1).ToString());
                                 comboBox6.Items.Add(gasSet[k].name);
                             }
                         }
@@ -371,10 +366,11 @@ namespace upper_computer
                             if (j >= 2) //气体浓度
                             {
                                 float fresult = Convert.ToSingle(result[j]);
+
+                                //超出量程按照量程显示
                                 if (fresult == 3999)
-                                    fresult = 100;
+                                    fresult = gasSet[j - 2].range;
                                 gas[j - 2] = fresult;
-                                //textBox1.AppendText(fresult.ToString() + " ");
                             }
                             else if (j == 0) //日期
                             {
@@ -386,13 +382,11 @@ namespace upper_computer
                                 date_time[j] = result[j].Insert(2, ":");
                                 date_time[j] = date_time[j].Insert(5, ":");
                             }
-
                             string s = date_time[0] + " " + date_time[1];
                             datetime = sToDate(s);
-
                         }
-                        //在此加入一行数据
 
+                        //在此加入一行数据
                         addDataSet(date_time, gas, rownumber);
                         addDateDt(datetime, gas, rownumber);
 
@@ -401,7 +395,6 @@ namespace upper_computer
                             string s = date_time[0] + " " + date_time[1];
                             startDate = sToDate(s);
                             dateTimePicker2.Value = startDate;
-
                         }
                     }
                     sr.Close();
@@ -409,8 +402,6 @@ namespace upper_computer
 
                     //获取终止时间
                     string str = date_time[0] + " " + date_time[1];
-                    //DateTimeFormatInfo dtFormat1 = new DateTimeFormatInfo();
-
                     endDate = sToDate(str);
                     dateTimePicker1.Value = endDate;
 
@@ -433,9 +424,7 @@ namespace upper_computer
                 button6.Enabled = false;
                 button7.Enabled = false;
                 button8.Enabled = false;
-            }
-
-            
+            }    
         }
 
         //初始化DataSet，加入dt表并初始化结构
@@ -444,51 +433,48 @@ namespace upper_computer
             dataSet1.Tables.Clear();
             dataSet1.Tables.Add(dt);
             dt.Columns.Clear();
-            dt.Columns.Add(new DataColumn("id", Type.GetType("System.Int32"), ""));
-            dt.Columns.Add(new DataColumn("date", Type.GetType("System.DateTime"), ""));
-            dt.Columns.Add(new DataColumn("time", Type.GetType("System.String"), ""));
+            dt.Columns.Add(new DataColumn("ID", Type.GetType("System.Int32"), ""));
+            dt.Columns.Add(new DataColumn("Date", Type.GetType("System.DateTime"), ""));
+            dt.Columns.Add(new DataColumn("Time", Type.GetType("System.String"), ""));
             for (int i = 0; i < number; i++)
             {
                 dt.Columns.Add(new DataColumn(gasSet[i].name, Type.GetType("System.Decimal"), ""));
             }
         }
 
-
         //初始化DateDt表结构
         private void initDateDt(int number)
         {
             dateDt.Columns.Clear();
-            dateDt.Columns.Add(new DataColumn("id", Type.GetType("System.Int32"), ""));
-            dateDt.Columns.Add(new DataColumn("date", Type.GetType("System.DateTime"), ""));
+            dateDt.Columns.Add(new DataColumn("ID", Type.GetType("System.Int32"), ""));
+            dateDt.Columns.Add(new DataColumn("Date", Type.GetType("System.DateTime"), ""));
             for (int i = 0; i < number; i++)
             {
                 dateDt.Columns.Add(new DataColumn(gasSet[i].name, Type.GetType("System.Decimal"), ""));
             }
         }
 
-        //向DateSet里添加一行数据
+        //向DateSet里添加一行数据，该数据表用于this Form
         private void addDataSet(string[] s, float[] f, int row)
         {
             DataRow dr = dt.NewRow();
-            dr["id"] = row;
-            dr["date"] = s[0];
-            dr["time"] = s[1];
+            dr["ID"] = row;
+            dr["Date"] = s[0];
+            dr["Time"] = s[1];
             for(int i = 0; i < gas_number; i++)
             {
                 dr[gasSet[i].name] = f[i];
             }
-
             dt.Rows.Add(dr);
             dataSet1.AcceptChanges();
         }
 
-        //向DateDt里添加一行数据
+        //向DateDt里添加一行数据, 该数据表用于后续其他Form
         private void addDateDt(DateTime dt, float[] f, int row)
         {
-
             DataRow dr = dateDt.NewRow();
-            dr["id"] = row;
-            dr["date"] = dt;
+            dr["ID"] = row;
+            dr["Date"] = dt;
             for (int i = 0; i < gas_number; i++)
             {
                 dr[gasSet[i].name] = f[i];
@@ -513,13 +499,12 @@ namespace upper_computer
                 endDateTime[0] = endarr[0];
                 endDateTime[1] = endarr[1];
 
+                //当前显示页的数据表筛选
                 if (sToDate(end) < sToDate(start))
                     selectGas(dt.Clone());
-
-                //当前显示页的数据表筛选
-                else if (startDateTime[0].Equals(endDateTime[0])) //如果起始日期相同
+                else if (startDateTime[0].Equals(endDateTime[0])) //如果起止日期相同
                 {
-                    DataRow[] drArr = dt.Select("time>='" + startDateTime[1] + "' and time<='" + endDateTime[1] + "' and date='" + startDateTime[0] + "'"); // 日期相同，主要只用考虑起始时间，并且日期要匹配！
+                    DataRow[] drArr = dt.Select("Time>='" + startDateTime[1] + "' and Time<='" + endDateTime[1] + "' and Date='" + startDateTime[0] + "'"); //日期相同，主要只用考虑起止时间，并且日期要匹配！
 
                     //把一个表的数据复制到另一个表
                     DataTable dtNew = dt.Clone();
@@ -528,15 +513,15 @@ namespace upper_computer
                         dtNew.ImportRow(drArr[i]);
                     }
 
-                    dtNew.DefaultView.Sort = "id ASC";
+                    dtNew.DefaultView.Sort = "ID ASC";
                     dtNew = dtNew.DefaultView.ToTable();
                     selectGas(dtNew);
                 }
-                else //如果起始日期不同
+                else //如果起止日期不同
                 {
-                    DataRow[] drArr0 = dt.Select("date>'" + startDateTime[0] + "' and date<'" + endDateTime[0] + "'"); // 夹在左右日期之间的日期（不包含）
-                    DataRow[] drArr1 = dt.Select("date='" + startDateTime[0] + "' and time>='" + startDateTime[1] + "'"); //左边界日期，当天时间需大于起始时间
-                    DataRow[] drArr2 = dt.Select("date='" + endDateTime[0] + "' and time<='" + endDateTime[1] + "'"); //右边界日期，当天时间需小于结束时间   
+                    DataRow[] drArr0 = dt.Select("Date>'" + startDateTime[0] + "' and Date<'" + endDateTime[0] + "'"); // 夹在左右日期之间的日期（不包含）
+                    DataRow[] drArr1 = dt.Select("Date='" + startDateTime[0] + "' and Time>='" + startDateTime[1] + "'"); //左边界日期，当天时间需大于起始时间
+                    DataRow[] drArr2 = dt.Select("Date='" + endDateTime[0] + "' and Time<='" + endDateTime[1] + "'"); //右边界日期，当天时间需小于结束时间   
 
                     //把一个表的数据复制到另一个表
                     DataTable dtNew = dt.Clone();
@@ -553,14 +538,13 @@ namespace upper_computer
                         dtNew.ImportRow(drArr2[i]);
                     }
 
-                    dtNew.DefaultView.Sort = "id ASC";
+                    dtNew.DefaultView.Sort = "ID ASC";
                     dtNew = dtNew.DefaultView.ToTable();
                     selectGas(dtNew);
                 }
 
-
                 //要传输到图表的数据表的筛选
-                DataRow[] dr = dateDt.Select("date>='" + sToDate(start) + "' and date<='" + sToDate(end) + "'");
+                DataRow[] dr = dateDt.Select("Date>='" + sToDate(start) + "' and Date<='" + sToDate(end) + "'");
 
                 //把一个表的数据复制到另一个表
                 DataTable dtNew1 = dateDt.Clone();
@@ -568,15 +552,14 @@ namespace upper_computer
                 {
                     dtNew1.ImportRow(dr[i]);
                 }
-                dtNew1.DefaultView.Sort = "id ASC";
+                dtNew1.DefaultView.Sort = "ID ASC";
                 dtNew1 = dtNew1.DefaultView.ToTable();
                 selectGasDt(dtNew1);
             }
             catch(Exception ex)
             {
                 MessageBox.Show("输入异常");
-            }
-            
+            }    
         }
 
         //传入日期筛选后的datatable，进行气体筛选，将结果复制到新表中绑定到dataGridView
@@ -586,7 +569,7 @@ namespace upper_computer
             float down = (float)numericUpDown3.Value;
             string gas = comboBox6.Text.ToString();
 
-            if (gas.Equals("all"))
+            if (gas.Equals("all")) //全选，此时直接将数据绑定即可
             {
                 dataGridView1.DataSource = datatable;
                 for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -594,7 +577,7 @@ namespace upper_computer
                     dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
-            else
+            else //选择某气体，需要先筛选再绑定数据
             {
                 DataRow[] drArr = datatable.Select(gas + ">=" + down + "and " + gas + "<=" + up);
 
@@ -604,7 +587,7 @@ namespace upper_computer
                 {
                     dtNew.ImportRow(drArr[i]);
                 }
-                dtNew.DefaultView.Sort = "id ASC";
+                dtNew.DefaultView.Sort = "ID ASC";
                 dtNew = dtNew.DefaultView.ToTable();
                 dataGridView1.DataSource = dtNew;
                 for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -631,7 +614,7 @@ namespace upper_computer
                 {
                     dtNew.ImportRow(drArr[i]);
                 }
-                dtNew.DefaultView.Sort = "id ASC";
+                dtNew.DefaultView.Sort = "ID ASC";
                 dtNew = dtNew.DefaultView.ToTable();
                 currentDt = dtNew;
             }
@@ -682,7 +665,6 @@ namespace upper_computer
                         break;
                     default:
                         break;
-
                 }
             }
         }
@@ -705,13 +687,13 @@ namespace upper_computer
         {
             try
             {
-                if (comboBox6.SelectedIndex == 0)
+                if (comboBox6.SelectedIndex == 0) //选择了all
                 {
                     Form2 f2 = new Form2(currentDt, gasSet);
                     f2.StartPosition = FormStartPosition.CenterScreen;
                     f2.Show();
                 }
-                else
+                else //选择了某项气体
                 {
                     Form2 f2 = new Form2(currentDt, gasSet, comboBox6.SelectedIndex - 1);
                     f2.StartPosition = FormStartPosition.CenterScreen;
@@ -732,13 +714,12 @@ namespace upper_computer
             return dt;
         }
 
+        //报警分析按钮
         private void button8_Click(object sender, EventArgs e)
         {
             Form3 f3 = new Form3(dateDt, gasSet, startDate, endDate);
             f3.StartPosition = FormStartPosition.CenterScreen;
             f3.Show();
         }
-
-       
     }
 }

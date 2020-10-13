@@ -132,9 +132,9 @@
             // 
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("Times New Roman", 10F);
-            this.textBox1.Location = new System.Drawing.Point(170, 212);
+            this.textBox1.Location = new System.Drawing.Point(185, 212);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(50, 23);
+            this.textBox1.Size = new System.Drawing.Size(47, 23);
             this.textBox1.TabIndex = 23;
             this.textBox1.Text = "0";
             // 
@@ -142,12 +142,12 @@
             // 
             this.radioButton3.AutoSize = true;
             this.radioButton3.Font = new System.Drawing.Font("宋体", 12F);
-            this.radioButton3.Location = new System.Drawing.Point(78, 213);
+            this.radioButton3.Location = new System.Drawing.Point(93, 213);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(90, 20);
             this.radioButton3.TabIndex = 22;
             this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "其他数值";
+            this.radioButton3.Text = "高于数值";
             this.radioButton3.UseVisualStyleBackColor = true;
             this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
@@ -191,7 +191,7 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("宋体", 12F);
-            this.radioButton2.Location = new System.Drawing.Point(78, 173);
+            this.radioButton2.Location = new System.Drawing.Point(93, 173);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(58, 20);
             this.radioButton2.TabIndex = 17;
@@ -204,7 +204,7 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
             this.radioButton1.Font = new System.Drawing.Font("宋体", 12F);
-            this.radioButton1.Location = new System.Drawing.Point(78, 133);
+            this.radioButton1.Location = new System.Drawing.Point(93, 133);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(58, 20);
             this.radioButton1.TabIndex = 16;
@@ -218,9 +218,9 @@
             this.label9.Font = new System.Drawing.Font("宋体", 12F);
             this.label9.Location = new System.Drawing.Point(15, 135);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(40, 16);
+            this.label9.Size = new System.Drawing.Size(72, 16);
             this.label9.TabIndex = 15;
-            this.label9.Text = "大于";
+            this.label9.Text = "报警条件";
             // 
             // label7
             // 

@@ -15,15 +15,15 @@ namespace upper_computer
 {
     public partial class Form2 : Form
     {
-        private static int MAX_NUMBER = 50;
+        private static int MAX_NUMBER = 50; //鼠标滚轮能缩放的最多点数
         private DataTable datatable = new DataTable();
         //private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
-        private DataPoint clickDp = null;
+        private DataPoint clickDp = null; //记录最后一次在图中点击的点
         private DataPoint clickDpDuplicate = new DataPoint();
-        private Gas[] gasSet = new Gas[6];
-        private int[] gasChosen = new int[6] { 0, 0, 0, 0, 0, 0 };
-        private int gasNumber = 0;
-        private int gasIndex = -1;
+        private Gas[] gasSet = new Gas[6]; //气体数组
+        private int[] gasChosen = new int[6] {0, 0, 0, 0, 0, 0}; //选择的气体
+        private int gasNumber = 0; //气体数量
+        private int gasIndex = -1; //气体数组下标
 
         public Form2(DataTable datatable, Gas[] gasSet)
         {
@@ -33,6 +33,7 @@ namespace upper_computer
             gasNumber = datatable.Columns.Count - 2;
         }
 
+        //该构造函数用于选择了一个气体
         public Form2(DataTable datatable, Gas[] gasSet, int gasIndex)
         {
             InitializeComponent();
@@ -52,6 +53,7 @@ namespace upper_computer
             setPanel();
         }
 
+        //添加Series
         public void addSeries()
         {
             chart1.DataSource = datatable;
@@ -62,6 +64,7 @@ namespace upper_computer
             }
         }
 
+        //图表数据
         public void RefreshData()
         {
             //通过datatable绑定数据
@@ -74,7 +77,7 @@ namespace upper_computer
             }
 
 
-            //求出最大点
+            //求出最大点并特殊显示
             double m = 0;
 
             for (int i = 0; i < gasNumber; i++)
@@ -102,6 +105,7 @@ namespace upper_computer
             //maxline();
         }
 
+        //设置Series中的属性
         public void setAttri()
         {
             for (int i = 0; i < gasNumber; i++)
@@ -117,6 +121,7 @@ namespace upper_computer
             }
         }
 
+        //设置ChartArea的属性
         public void setArea()
         {
             //设置坐标轴标题
@@ -150,6 +155,7 @@ namespace upper_computer
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSizeType = DateTimeIntervalType.Seconds;
             chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
 
+            //设置游标格式
             chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = false;
             chart1.ChartAreas[0].CursorX.IntervalType = DateTimeIntervalType.Seconds;
@@ -159,40 +165,40 @@ namespace upper_computer
 
         }
 
+        //窗口加载函数
         private void Form2_Load(object sender, EventArgs e)
         {
-            runMain();
-            
+            runMain();    
         }
       
         //鼠标滚轮事件，用来缩放
         protected void OnMouseWheel(object sender, MouseEventArgs e)
         {
-            if (e.Delta > 0)//鼠标向上
+            if (e.Delta > 0) //鼠标向上，缩放
             {
-                if (chart1.ChartAreas[0].AxisX.ScaleView.Size < MAX_NUMBER)//判断显示的最大数值
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 2;//+=5---滚动一次显示5个
+                if (chart1.ChartAreas[0].AxisX.ScaleView.Size < MAX_NUMBER) //判断显示的最大数值
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size += 2; //滚动一次显示2个
 
             }
-            else//鼠标向下滚动
+            else //鼠标向下滚动，放大
             {
                 if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 2)
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 2;// - = 5---滚动一次减小显示5个
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size -= 2; //滚动一次减小显示2个
                 else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 2)
                     chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
             }
         }
 
-        //鼠标点击数据点事件
+        //鼠标点击数据点事件函数
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
             HitTestResult hit = chart1.HitTest(e.X, e.Y);
 
-            if (hit.Series != null && hit.PointIndex != -1)
+            if (hit.Series != null && hit.PointIndex != -1) //点击的点需要是Series上并且有点Index才可判定为有效（否则点击Legend会出现bug）
             {
-                DateTime dt = DateTime.FromOADate(hit.Series.Points[hit.PointIndex].XValue);
-                double y = hit.Series.Points[hit.PointIndex].YValues[0];
-                string lgtext = hit.Series.LegendText;
+                DateTime dt = DateTime.FromOADate(hit.Series.Points[hit.PointIndex].XValue); //时间
+                double y = hit.Series.Points[hit.PointIndex].YValues[0]; //y值
+                string lgtext = hit.Series.LegendText; //曲线名称
                 int seriesindex = 0;
                 for(int i = 0; i < 6; i++)
                 {
@@ -224,7 +230,7 @@ namespace upper_computer
                 {
                     if(clickDp == null)//第一次点击
                     {
-                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，再进行更改
+                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，后续再进行更改
                         //this.clickDp.XValue = dp.XValue;
                         //this.clickDp.YValues[0] = dp.YValues[0];
                         this.clickDp = dp;
@@ -235,7 +241,7 @@ namespace upper_computer
                     else //点击了其他点
                     {
                         setPointMarker(clickDpDuplicate, clickDp);//将上一个点的属性还原
-                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，再进行更改
+                        setPointMarker(dp, clickDpDuplicate);//复制该点的原本属性，后续再进行更改
                         dp.MarkerSize = 8;
                         dp.MarkerColor = Color.Red;
                         dp.MarkerStyle = MarkerStyle.Circle;
@@ -243,7 +249,6 @@ namespace upper_computer
                     }
                 }
             }
-
         }
         
         //气体选择事件
@@ -257,10 +262,10 @@ namespace upper_computer
                     chart1.Series[i].Enabled = false;
             }
             chart1.ChartAreas[0].RecalculateAxesScale(); //刷新坐标轴
-            checkedListBox1.ClearSelected();
+            checkedListBox1.ClearSelected(); //显示时取消横行选中，只显示打勾
         }
 
-        //鼠标所在坐标显示
+        //鼠标移动事件，鼠标所在坐标显示
         private void chart1_MouseMove(object sender, MouseEventArgs e)
         {
             try
@@ -269,9 +274,10 @@ namespace upper_computer
                 //chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new PointF(e.X, e.Y), true);
                 double cursorX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(e.X);
                 double cursorY = chart1.ChartAreas[0].AxisY.PixelPositionToValue(e.Y);
-                DateTime dateTime = DateTime.FromOADate(cursorX);
+                DateTime dateTime = DateTime.FromOADate(cursorX); //鼠标所在x轴的时间
                 textBox2.Text = dateTime.ToString()+ "  ";
 
+                //判断当前哪些气体被选中
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
                     if (checkedListBox1.GetItemChecked(i) == true)
@@ -279,6 +285,8 @@ namespace upper_computer
                     else
                         gasChosen[i] = 0;
                 }
+
+                //寻找该时间点的所有气体对应数值
                 for (int i = 0; i < gasNumber; i++)
                 {
                     foreach (DataPoint dp in chart1.Series[i].Points)
@@ -351,8 +359,9 @@ namespace upper_computer
                     }
                 } 
             }
-            catch
+            catch(Exception ex)
             {
+                //MessageBox.Show(ex.Message);
             }
         }
 
@@ -377,6 +386,7 @@ namespace upper_computer
             }
         }
 
+        //曲线上鼠标悬浮提示
         private void chart1_GetToolTipText(object sender, ToolTipEventArgs e)
         {
             if (e.HitTestResult.ChartElementType == ChartElementType.DataPoint)
@@ -386,11 +396,11 @@ namespace upper_computer
                 DateTime dt = DateTime.FromOADate(dp.XValue);
                 double y = dp.YValues[0];
                 string lgtext = e.HitTestResult.Series.LegendText;
-
                 e.Text = string.Format("曲线：{0}\r\n时间：{1}\r\n数值：{2:F1}", lgtext, dt, y);
             }
         }
 
+        //将一个DataPoint的一些属性值复制到另一个
         private void setPointMarker(DataPoint source, DataPoint dp)
         {
             dp.MarkerStyle = source.MarkerStyle;
@@ -398,20 +408,21 @@ namespace upper_computer
             dp.MarkerColor = source.MarkerColor;
         }
 
+        //气体选择框初始化
         private void initCheckedListBox()
         {
             for (int i = 0; i < gasNumber; i++)
             {
                 checkedListBox1.Items.Add(gasSet[i].name);
             }
-            if(gasIndex < 0)
+            if(gasIndex < 0) //all
             {
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 {
                     checkedListBox1.SetItemChecked(i, true); //默认全选中
                 }
             }
-            else
+            else //选中了某气体
             {
                 checkedListBox1.SetItemChecked(gasIndex, true);
                 for(int i = 0; i < gasNumber; i++)
@@ -425,6 +436,7 @@ namespace upper_computer
             textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值：");
         }
 
+        //设置显示面板，需要适应气体数量
         private void setPanel()
         {
             switch (gasNumber)
@@ -533,12 +545,9 @@ namespace upper_computer
                     label20.Visible = false;
                     panel3.Size = new Size(197, 105);
                     break;
-
                 default:
                     break;
-
             }
         }
-
     }
 }
