@@ -15,7 +15,7 @@ namespace upper_computer
 {
     public partial class Form2 : Form
     {
-        private static int MAX_NUMBER = 50; //鼠标滚轮能缩放的最多点数
+        private int MAX_NUMBER = 50; //鼠标滚轮能缩放的最多点数
         private DataTable datatable = new DataTable();
         //private double[] gasMax = new double[6] { 0, 0, 0, 0, 0, 0};
         private DataPoint clickDp = null; //记录最后一次在图中点击的点
@@ -24,23 +24,26 @@ namespace upper_computer
         private int[] gasChosen = new int[6] {0, 0, 0, 0, 0, 0}; //选择的气体
         private int gasNumber = 0; //气体数量
         private int gasIndex = -1; //气体数组下标
+        private int rownumber = 0; //表中数据行数
 
-        public Form2(DataTable datatable, Gas[] gasSet)
+        public Form2(DataTable datatable, Gas[] gasSet, int rownumber)
         {
             InitializeComponent();
             this.datatable = datatable;
             this.gasSet = gasSet;
             gasNumber = datatable.Columns.Count - 2;
+            this.rownumber = rownumber;
         }
 
         //该构造函数用于选择了一个气体
-        public Form2(DataTable datatable, Gas[] gasSet, int gasIndex)
+        public Form2(DataTable datatable, Gas[] gasSet, int gasIndex, int rownumber)
         {
             InitializeComponent();
             this.datatable = datatable;
             this.gasSet = gasSet;
             gasNumber = datatable.Columns.Count - 2;
             this.gasIndex = gasIndex;
+            this.rownumber = rownumber;
         }
 
         public void runMain()
@@ -75,7 +78,6 @@ namespace upper_computer
                 chart1.Series[i].YValueMembers = datatable.Columns[i + 2].ColumnName;
                 chart1.DataBind();
             }
-
 
             //求出最大点并特殊显示
             double m = 0;
@@ -135,7 +137,7 @@ namespace upper_computer
             //设置坐标轴栅格
             chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = true;
             chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = true;
-            chart1.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            //chart1.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
             chart1.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
 
@@ -148,12 +150,14 @@ namespace upper_computer
             chart1.ChartAreas[0].AxisX.ScrollBar.Size = 14;
             chart1.ChartAreas[0].AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Seconds; 
             chart1.ChartAreas[0].AxisX.ScaleView.SizeType = DateTimeIntervalType.Minutes;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 5;
-            chart1.ChartAreas[0].AxisX.ScaleView.MinSize = 2;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = setScaleView(rownumber);
+            chart1.ChartAreas[0].AxisX.ScaleView.MinSize = 1;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollSize = 10;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 5;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSizeType = DateTimeIntervalType.Seconds;
             chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
+            chart1.ChartAreas[0].AxisX.LabelStyle.Angle = 0;
+            //chart1.ChartAreas[0].AxisX.IsMarginVisible = false;
 
             //设置游标格式
             chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
@@ -162,7 +166,6 @@ namespace upper_computer
 
             chart1.ChartAreas[0].CursorY.IsUserEnabled = false;
             chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = false;
-
         }
 
         //窗口加载函数
@@ -187,6 +190,7 @@ namespace upper_computer
                 else if(chart1.ChartAreas[0].AxisX.ScaleView.Size <= 2)
                     chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
             }
+            chart1.ChartAreas[0].RecalculateAxesScale(); //刷新坐标轴
         }
 
         //鼠标点击数据点事件函数
@@ -435,6 +439,52 @@ namespace upper_computer
             }
             textBox1.Text = string.Format("曲线：\r\n时间：\r\n数值：");
         }
+
+        //根据数据条数来适应折线图显示
+        private int setScaleView(int rownumber)
+        {
+            if(rownumber <= 30)
+            {
+                this.MAX_NUMBER = 5;
+                return 1;
+            }
+            else if (rownumber > 30 && rownumber <= 60)
+            {
+                this.MAX_NUMBER = 5;
+                return 2;
+            }
+            else if(rownumber > 60 && rownumber <= 150)
+            {
+                this.MAX_NUMBER = 10;
+                return 5;
+            }
+            else if(rownumber > 150 && rownumber <= 300)
+            {
+                this.MAX_NUMBER = 20;
+                return 10;
+            }
+            else if(rownumber > 300 && rownumber <= 600)
+            {
+                this.MAX_NUMBER = 40;
+                return 15;
+            }
+            else if(rownumber > 600 && rownumber <= 1200)
+            {
+                this.MAX_NUMBER = 50;
+                return 30;
+            }
+            else if (rownumber > 1200 && rownumber <= 2500)
+            {
+                this.MAX_NUMBER = 50;
+                return 50;
+            }
+            else
+            {
+                this.MAX_NUMBER = 100;
+                return 50;
+            }
+        }
+
 
         //设置显示面板，需要适应气体数量
         private void setPanel()

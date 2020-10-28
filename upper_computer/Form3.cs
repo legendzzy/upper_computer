@@ -124,8 +124,8 @@ namespace upper_computer
                 alarmTable.DefaultView.Sort = "ID ASC";
                 alarmTable = alarmTable.DefaultView.ToTable();
                 dataGridView1.DataSource = alarmTable;
-                dataGridView1.Columns[1].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
-                dataGridView1.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd hh:mm:ss";
+                dataGridView1.Columns[1].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
+                dataGridView1.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
                 dataGridView1.Columns[3].DefaultCellStyle.Format = "0.0";
                 dataGridView1.Columns[4].DefaultCellStyle.Format = "0.0";
                 for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -192,11 +192,11 @@ namespace upper_computer
 
                 DataRow dr = targetTable.NewRow();
                 dr["ID"] = i + 1;
-                dr["Starttime"] = starttime;
-                dr["Endtime"] = endtime;
-                dr["Max"] = max;
-                dr["Average"] = average;
-                dr["Duration"] = duration;
+                dr["开始时间"] = starttime;
+                dr["结束时间"] = endtime;
+                dr["最大值"] = max;
+                dr["平均值"] = average;
+                dr["持续时间"] = duration;
                 targetTable.Rows.Add(dr);
             }
         }
@@ -220,7 +220,9 @@ namespace upper_computer
             int rowIndex = dataGridView1.CurrentRow.Index; //选中行
             int id = Convert.ToInt32(dataGridView1.Rows[rowIndex].Cells[0].Value); //注意此id从1开始
             DataTable currTable = tableList[id - 1]; //要使用的数据表
-            Form2 f2 = new Form2(currTable, gasSet, gasIndex);
+
+            int rownumber = currTable.Rows.Count;
+            Form2 f2 = new Form2(currTable, gasSet, gasIndex, rownumber);
             f2.StartPosition = FormStartPosition.CenterScreen;
             f2.Show();
         }
@@ -243,11 +245,11 @@ namespace upper_computer
         {
             alarmTable.Columns.Clear();
             alarmTable.Columns.Add(new DataColumn("ID", Type.GetType("System.Int32"), ""));
-            alarmTable.Columns.Add(new DataColumn("Starttime", Type.GetType("System.DateTime"), ""));
-            alarmTable.Columns.Add(new DataColumn("Endtime", Type.GetType("System.DateTime"), ""));
-            alarmTable.Columns.Add(new DataColumn("Max", Type.GetType("System.Decimal"), ""));
-            alarmTable.Columns.Add(new DataColumn("Average", Type.GetType("System.Decimal"), ""));
-            alarmTable.Columns.Add(new DataColumn("Duration", Type.GetType("System.String"), ""));
+            alarmTable.Columns.Add(new DataColumn("开始时间", Type.GetType("System.DateTime"), ""));
+            alarmTable.Columns.Add(new DataColumn("结束时间", Type.GetType("System.DateTime"), ""));
+            alarmTable.Columns.Add(new DataColumn("最大值", Type.GetType("System.Decimal"), ""));
+            alarmTable.Columns.Add(new DataColumn("平均值", Type.GetType("System.Decimal"), ""));
+            alarmTable.Columns.Add(new DataColumn("持续时间", Type.GetType("System.String"), ""));
         }
     }
 }

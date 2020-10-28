@@ -16,12 +16,13 @@ namespace upper_computer
 {
     public struct Gas
     {
-        public string name;
-        public float range;
-        public string unit;
-        public float low_level_alarm;
-        public float high_level_alarm;
+        public string name; //名称
+        public float range; //量程
+        public string unit; //计量单位
+        public float low_level_alarm; //低报
+        public float high_level_alarm; //高报
     }
+
     public partial class Form1 : Form
     {
         private long receive_count = 0; //接收字节计数, 作用相当于全局变量
@@ -53,7 +54,7 @@ namespace upper_computer
         private void Form1_Load(object sender, EventArgs e)
         {
             //单个添加
-            for (int i = 300; i <= 38400; i = i*2)
+            for (int i = 300; i <= 38400; i *= 2)
             {
                 comboBox2.Items.Add(i.ToString());  //添加波特率列表
             }
@@ -368,7 +369,7 @@ namespace upper_computer
                                 float fresult = Convert.ToSingle(result[j]);
 
                                 //超出量程按照量程显示
-                                if (fresult == 3999)
+                                if (fresult > gasSet[j - 2].range)
                                     fresult = gasSet[j - 2].range;
                                 gas[j - 2] = fresult;
                             }
@@ -689,13 +690,13 @@ namespace upper_computer
             {
                 if (comboBox6.SelectedIndex == 0) //选择了all
                 {
-                    Form2 f2 = new Form2(currentDt, gasSet);
+                    Form2 f2 = new Form2(currentDt, gasSet, rownumber);
                     f2.StartPosition = FormStartPosition.CenterScreen;
                     f2.Show();
                 }
                 else //选择了某项气体
                 {
-                    Form2 f2 = new Form2(currentDt, gasSet, comboBox6.SelectedIndex - 1);
+                    Form2 f2 = new Form2(currentDt, gasSet, comboBox6.SelectedIndex - 1, rownumber);
                     f2.StartPosition = FormStartPosition.CenterScreen;
                     f2.Show();
                 }
