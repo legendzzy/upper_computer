@@ -68,6 +68,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -92,6 +100,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -228,13 +244,13 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:上位机软件"
         "ProductCode" = "8:{B37DAAC0-4DA8-4305-86F0-7B6038D08575}"
         "PackageCode" = "8:{DED7E5B1-75AC-4950-84DE-73DEBA01C178}"
         "UpgradeCode" = "8:{98A538E6-6812-452C-9787-7B5E2CF8B742}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
@@ -779,7 +795,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_AC73D1DA10344BBAA9AD9134F4889968"
             {
-            "SourcePath" = "8:..\\upper_computer\\obj\\Debug\\upper_computer.exe"
+            "SourcePath" = "8:..\\upper_computer\\obj\\Release\\upper_computer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_BF4C0255D17F42E0A1637E34C3E68744"

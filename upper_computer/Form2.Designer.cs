@@ -80,6 +80,7 @@ namespace upper_computer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BackColor = System.Drawing.Color.AliceBlue;
+            this.chart1.BackSecondaryColor = System.Drawing.Color.White;
             chartArea1.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
             chartArea1.AxisX.IsLabelAutoFit = false;
             chartArea1.AxisX.LabelStyle.Interval = 0D;
@@ -106,7 +107,6 @@ namespace upper_computer
             chartArea1.CursorY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Top;
             legend1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             legend1.IsTextAutoFit = false;
             legend1.Name = "Legend1";
@@ -130,11 +130,11 @@ namespace upper_computer
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 11F);
-            this.textBox1.Location = new System.Drawing.Point(897, 5);
+            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 10F);
+            this.textBox1.Location = new System.Drawing.Point(911, 6);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(355, 17);
+            this.textBox1.Size = new System.Drawing.Size(348, 16);
             this.textBox1.TabIndex = 1;
             // 
             // label1
@@ -143,11 +143,11 @@ namespace upper_computer
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.label1.Font = new System.Drawing.Font("黑体", 12F);
-            this.label1.Location = new System.Drawing.Point(835, 4);
+            this.label1.Location = new System.Drawing.Point(795, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 16);
+            this.label1.Size = new System.Drawing.Size(104, 16);
             this.label1.TabIndex = 2;
-            this.label1.Text = "点信息";
+            this.label1.Text = "◎浓度点信息";
             // 
             // panel1
             // 
@@ -221,21 +221,21 @@ namespace upper_computer
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("黑体", 12F);
-            this.label3.Location = new System.Drawing.Point(12, 4);
+            this.label3.Location = new System.Drawing.Point(8, 5);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 16);
+            this.label3.Size = new System.Drawing.Size(120, 16);
             this.label3.TabIndex = 4;
-            this.label3.Text = "坐标信息";
+            this.label3.Text = "◎时刻浓度信息";
             // 
             // textBox2
             // 
             this.textBox2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Font = new System.Drawing.Font("Times New Roman", 11F);
-            this.textBox2.Location = new System.Drawing.Point(88, 5);
+            this.textBox2.Font = new System.Drawing.Font("Times New Roman", 10F);
+            this.textBox2.Location = new System.Drawing.Point(140, 6);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(741, 17);
+            this.textBox2.Size = new System.Drawing.Size(643, 16);
             this.textBox2.TabIndex = 5;
             // 
             // panel2

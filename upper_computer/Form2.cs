@@ -25,11 +25,12 @@ namespace upper_computer
         private int gasNumber = 0; //气体数量
         private int gasIndex = -1; //气体数组下标
         private int rownumber = 0; //表中数据行数
+        private TimeSpan TS = new TimeSpan(0, 0, 10);
 
         public Form2(DataTable datatable, Gas[] gasSet, int rownumber)
         {
             InitializeComponent();
-            this.datatable = datatable;
+            this.datatable = datatable.Copy();
             this.gasSet = gasSet;
             gasNumber = datatable.Columns.Count - 2;
             this.rownumber = rownumber;
@@ -39,7 +40,7 @@ namespace upper_computer
         public Form2(DataTable datatable, Gas[] gasSet, int gasIndex, int rownumber)
         {
             InitializeComponent();
-            this.datatable = datatable;
+            this.datatable = datatable.Copy();
             this.gasSet = gasSet;
             gasNumber = datatable.Columns.Count - 2;
             this.gasIndex = gasIndex;
@@ -67,27 +68,57 @@ namespace upper_computer
             }
         }
 
-        //图表数据
+        //获取图表数据
         public void RefreshData()
         {
-            //通过datatable绑定数据
-        
+            //对数据表中加入空值          
+            addEmptyPoint();
+
+            //采用数组形式进行chart数据绑定
+            DateTime[] xAxis = new DateTime[datatable.Rows.Count];
+            double[][] yAxis = new double[gasNumber][];
             for(int i = 0; i < gasNumber; i++)
+            {
+                yAxis[i] = new double[datatable.Rows.Count];
+            }
+
+            for(int i = 0; i < datatable.Rows.Count; i++)
+            {
+                xAxis[i] = (DateTime)datatable.Rows[i][1];
+            }
+            for(int i = 0; i < gasNumber; i++)
+            {
+                for(int j = 0; j < datatable.Rows.Count; j++)
+                {
+                    if (datatable.Rows[j][i + 2] != DBNull.Value)
+                        yAxis[i][j] = Convert.ToDouble(datatable.Rows[j][i + 2]);
+                    else
+                        yAxis[i][j] = double.NaN;
+                }
+            }
+
+            for(int i = 0; i < gasNumber; i++)
+            {
+                chart1.Series[i].Points.DataBindXY(xAxis, yAxis[i]);
+            }
+
+            /*
+            //通过datatable绑定数据 此方法对插入空值的显示效果不成功  
+            for (int i = 0; i < gasNumber; i++)
             {
                 chart1.Series[i].XValueMember = datatable.Columns[1].ColumnName;
                 chart1.Series[i].YValueMembers = datatable.Columns[i + 2].ColumnName;
                 chart1.DataBind();
             }
+            */
 
             //求出最大点并特殊显示
-            double m = 0;
-
             for (int i = 0; i < gasNumber; i++)
-            {
-                m = 0;
-                for(int j = 0; j < datatable.Rows.Count; j++)
+            {     
+                double m = 0;
+                for (int j = 0; j < datatable.Rows.Count; j++)
                 {
-                    if (Convert.ToDouble(datatable.Rows[j][i + 2]) >= m)
+                    if (datatable.Rows[j][i + 2] != DBNull.Value && Convert.ToDouble(datatable.Rows[j][i + 2]) >= m)
                     {
                         m = Convert.ToDouble(datatable.Rows[j][i + 2]);
                     }
@@ -104,7 +135,45 @@ namespace upper_computer
                     }
                 }
             }
-            //maxline();
+            //maxline();           
+        }
+
+        //两点之间时间间隔过大不连续时，通过插入空值，中断折线图的连线
+        public void addEmptyPoint()
+        {
+            int ncount = datatable.Rows.Count; //保留原始数据条数，后续增加的空点先放置于数据表后面，只是对ID列进行调整，数据处理完毕后再用ID进行排序
+            int k = 1;
+            while(k < ncount)
+            {
+                //如果时间间隔大于TS，则需要插入空点
+                if((DateTime)datatable.Rows[k]["Date"] - (DateTime)datatable.Rows[k - 1]["Date"] > TS)
+                {
+                    //先将包括k的后面的行的ID都+1
+                    for(int i = k; i < ncount; i++)
+                    {
+                        datatable.Rows[i]["ID"] = (int)datatable.Rows[i]["ID"] + 1;
+                    }
+
+                    //再将k处插入空点
+                    DataRow dr = datatable.NewRow();
+                    dr["ID"] = (int)datatable.Rows[k]["ID"] - 1;
+                    dr["Date"] = ((DateTime)datatable.Rows[k - 1]["Date"]).AddSeconds(5);                  
+                    for (int i = 0; i < gasNumber; i++)
+                    {
+                        dr[gasSet[i].name] = DBNull.Value;
+                    }                  
+                    datatable.Rows.Add(dr);
+                    k++;
+                }
+                //时间间隔小于TS，判定为时间连续，不作处理
+                else
+                {
+                    k++;
+                }
+            }
+            //将数据表再按ID进行排序
+            datatable.DefaultView.Sort = "Date ASC";
+            datatable = datatable.DefaultView.ToTable();
         }
 
         //设置Series中的属性
@@ -120,6 +189,17 @@ namespace upper_computer
                 
                 chart1.Series[i].MarkerStyle = MarkerStyle.Circle;
                 chart1.Series[i].MarkerSize = 5;
+
+                //调整空点的外观表现
+                chart1.Series[i]["EmptyPointValue"] = "Zero";
+                chart1.Series[i].EmptyPointStyle.Color = Color.Gray;
+                chart1.Series[i].EmptyPointStyle.BorderWidth = 0;
+                chart1.Series[i].EmptyPointStyle.BorderDashStyle = ChartDashStyle.Dash;
+                chart1.Series[i].EmptyPointStyle.MarkerSize = 7;
+                chart1.Series[i].EmptyPointStyle.MarkerStyle = MarkerStyle.None;
+                chart1.Series[i].EmptyPointStyle.MarkerBorderColor = Color.Black;
+                chart1.Series[i].EmptyPointStyle.MarkerColor = Color.LightGray;
+                
             }
         }
 
@@ -140,6 +220,15 @@ namespace upper_computer
             //chart1.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.LightGray;
             chart1.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.LightGray;
+
+            //设置显示背景网格
+            chart1.ChartAreas[0].BackColor = Color.White;
+            chart1.ChartAreas[0].BackSecondaryColor = Color.WhiteSmoke;
+            chart1.ChartAreas[0].BackGradientStyle = GradientStyle.None;//这两者不可共存
+            chart1.ChartAreas[0].BackHatchStyle = ChartHatchStyle.Cross;//这两者不可共存
+
+            //设置legend
+            chart1.Legends[0].BorderColor = Color.LightGray;
 
             //设置坐标轴显示格式
             chart1.ChartAreas[0].AxisX.IsLabelAutoFit = true; 
@@ -302,57 +391,129 @@ namespace upper_computer
                             {
                                 case 0:
                                     label12.Text = dp.YValues[0].ToString();
-                                    if(dp.YValues[0] < gasSet[0].low_level_alarm)
-                                        label12.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
-                                        label12.ForeColor = Color.Orange;
+                                    if (gasSet[0].name.Equals("O2") || gasSet[0].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[0].low_level_alarm)
+                                            label12.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
+                                            label12.ForeColor = Color.Green;
+                                        else
+                                            label12.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label12.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[0].low_level_alarm)
+                                            label12.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[0].low_level_alarm && dp.YValues[0] <= gasSet[0].high_level_alarm)
+                                            label12.ForeColor = Color.Orange;
+                                        else
+                                            label12.ForeColor = Color.Red; 
+                                    }
                                     break;
                                 case 1:
                                     label13.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] < gasSet[1].low_level_alarm)
-                                        label13.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
-                                        label13.ForeColor = Color.Orange;
+                                    if (gasSet[1].name.Equals("O2") || gasSet[1].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[1].low_level_alarm)
+                                            label13.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
+                                            label13.ForeColor = Color.Green;
+                                        else
+                                            label13.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label13.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[1].low_level_alarm)
+                                            label13.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[1].low_level_alarm && dp.YValues[0] <= gasSet[1].high_level_alarm)
+                                            label13.ForeColor = Color.Orange;
+                                        else
+                                            label13.ForeColor = Color.Red;
+                                    }
                                     break;
                                 case 2:
                                     label14.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] < gasSet[2].low_level_alarm)
-                                        label14.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
-                                        label14.ForeColor = Color.Orange;
+                                    if (gasSet[2].name.Equals("O2") || gasSet[2].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[2].low_level_alarm)
+                                            label14.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
+                                            label14.ForeColor = Color.Green;
+                                        else
+                                            label14.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label14.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[2].low_level_alarm)
+                                            label14.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[2].low_level_alarm && dp.YValues[0] <= gasSet[2].high_level_alarm)
+                                            label14.ForeColor = Color.Orange;
+                                        else
+                                            label14.ForeColor = Color.Red;
+                                    }                                    
                                     break;
                                 case 3:
                                     label15.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] < gasSet[3].low_level_alarm)
-                                        label15.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
-                                        label15.ForeColor = Color.Orange;
+                                    if (gasSet[3].name.Equals("O2") || gasSet[3].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[3].low_level_alarm)
+                                            label15.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
+                                            label15.ForeColor = Color.Green;
+                                        else
+                                            label15.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label15.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[3].low_level_alarm)
+                                            label15.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[3].low_level_alarm && dp.YValues[0] <= gasSet[3].high_level_alarm)
+                                            label15.ForeColor = Color.Orange;
+                                        else
+                                            label15.ForeColor = Color.Red;
+                                    }                                   
                                     break;
                                 case 4:
                                     label16.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] < gasSet[4].low_level_alarm)
-                                        label16.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
-                                        label16.ForeColor = Color.Orange;
+                                    if (gasSet[4].name.Equals("O2") || gasSet[4].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[4].low_level_alarm)
+                                            label16.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
+                                            label16.ForeColor = Color.Green;
+                                        else
+                                            label16.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label16.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[4].low_level_alarm)
+                                            label16.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[4].low_level_alarm && dp.YValues[0] <= gasSet[4].high_level_alarm)
+                                            label16.ForeColor = Color.Orange;
+                                        else
+                                            label16.ForeColor = Color.Red;
+                                    }
                                     break;
                                 case 5:
                                     label17.Text = dp.YValues[0].ToString();
-                                    if (dp.YValues[0] < gasSet[5].low_level_alarm)
-                                        label17.ForeColor = Color.Green;
-                                    else if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
-                                        label17.ForeColor = Color.Orange;
+                                    if (gasSet[5].name.Equals("O2") || gasSet[5].name.Equals("氧气"))
+                                    {
+                                        if (dp.YValues[0] < gasSet[5].low_level_alarm)
+                                            label17.ForeColor = Color.Orange;
+                                        else if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
+                                            label17.ForeColor = Color.Green;
+                                        else
+                                            label17.ForeColor = Color.Red;
+                                    }
                                     else
-                                        label17.ForeColor = Color.Red;
+                                    {
+                                        if (dp.YValues[0] < gasSet[5].low_level_alarm)
+                                            label17.ForeColor = Color.Green;
+                                        else if (dp.YValues[0] >= gasSet[5].low_level_alarm && dp.YValues[0] <= gasSet[5].high_level_alarm)
+                                            label17.ForeColor = Color.Orange;
+                                        else
+                                            label17.ForeColor = Color.Red;
+                                    }                                  
                                     break;
                                 default:
                                     break;
@@ -599,5 +760,6 @@ namespace upper_computer
                     break;
             }
         }
+
     }
 }

@@ -21,6 +21,7 @@ namespace upper_computer
         private DataTable alarmTable = new DataTable(); //要显示在datagridview上的警报分析表
         private List<DataTable> tableList = new List<DataTable>(); //每一段报警时段的原始数据存为一个table放在该List中
         private int gasIndex; //选择气体的index，在气体选择事件中获取并赋值
+        private TimeSpan TS = new TimeSpan(0, 0, 10);
 
         //构造函数
         public Form3(DataTable dataTable, Gas[] gasSet, DateTime initStartTime, DateTime initEndTime)
@@ -53,10 +54,15 @@ namespace upper_computer
                     alarm = gasSet[gasIndex].high_level_alarm;
                     alarmText = radioButton2.Text;
                 }
-                else //其他数值
+                else if (radioButton3.Checked) //高于其他数值
                 {
                     alarm = (float)Convert.ToDecimal(textBox1.Text);
                     alarmText = "超过" + textBox1.Text + gasSet[gasIndex].unit;
+                }
+                else //低于其他数值
+                {
+                    alarm = (float)Convert.ToDecimal(textBox2.Text);
+                    alarmText = "低于" + textBox2.Text + gasSet[gasIndex].unit;
                 }
 
                 tableList.Clear();
@@ -66,10 +72,15 @@ namespace upper_computer
                     DataRow[] dr_low = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and " + gasSet[gasIndex].name + "<" + gasSet[gasIndex].high_level_alarm + " and " + gasSet[gasIndex].name + ">=" + alarm);
                     dr = dr_low;
                 }
-                else  //高报及其他数值
+                else if(radioButton2.Checked || radioButton3.Checked) //高报及高于其他数值
                 {
                     DataRow[] dr_high = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and " + gasSet[gasIndex].name + ">=" + alarm);
                     dr = dr_high;
+                }
+                else //低于其他数值
+                {
+                    DataRow[] dr_low = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and " + gasSet[gasIndex].name + "<=" + alarm);
+                    dr = dr_low;
                 }
 
                 if (dr.Length == 0)
@@ -96,11 +107,12 @@ namespace upper_computer
                 {
                     for (int i = 1; i < newDt.Rows.Count; i++)
                     {
-                        if ((int)newDt.Rows[i]["ID"] - (int)newDt.Rows[i - 1]["ID"] < INTERVAL) //如果两条数据之间的ID相差超过设定的INTERVAL，则判定为不同的时段
+                        //如果两条数据之间的时间相差超过设定的timespan，则判定为不同的时段
+                        if ((DateTime)newDt.Rows[i]["Date"] - (DateTime)newDt.Rows[i - 1]["Date"] < TS) //连续 
                         {
                             currTable.ImportRow(newDt.Rows[i]);
                         }
-                        else //将当前table加入list中，并且清空该table重新记录下一个要加到list中的table
+                        else //不连续，将当前table加入list中，并且清空该table重新记录下一个要加到list中的table
                         {
                             DataTable newTable = new DataTable(); //此处需要新建一个DataTable对象，加入到tableList中
                             newTable = currTable.Copy();
@@ -109,7 +121,7 @@ namespace upper_computer
                             currTable.ImportRow(newDt.Rows[i]);
                         }
                     }
-                    DataTable newTable_end = new DataTable(); //此处需要新建一个DataTable对象，加入到tableList中
+                    DataTable newTable_end = new DataTable(); //循环结束此处需要新建一个DataTable对象，加入到tableList中
                     newTable_end = currTable.Copy();
                     tableList.Add(newTable_end); //将最后一个table加入list
                 }
@@ -138,6 +150,7 @@ namespace upper_computer
             catch(Exception ex)
             {
                 MessageBox.Show("输入异常");
+                //MessageBox.Show(ex.Message);
             }           
         }
 
@@ -237,6 +250,19 @@ namespace upper_computer
             else
             {
                 textBox1.Enabled = false;
+            }
+        }
+
+        //低于数值按钮的选择事件，需要将输入框激活/不激活
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton4.Checked)
+            {
+                textBox2.Enabled = true;
+            }
+            else
+            {
+                textBox2.Enabled = false;
             }
         }
 

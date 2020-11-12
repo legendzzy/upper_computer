@@ -399,6 +399,9 @@ namespace upper_computer
                         }
                     }
                     sr.Close();
+
+                    dateDt.DefaultView.Sort = "Date ASC";
+                    dateDt = dateDt.DefaultView.ToTable();
                     currentDt = dateDt;
 
                     //获取终止时间
@@ -467,6 +470,7 @@ namespace upper_computer
                 dr[gasSet[i].name] = f[i];
             }
             dt.Rows.Add(dr);
+            
             dataSet1.AcceptChanges();
         }
 
@@ -480,6 +484,7 @@ namespace upper_computer
             {
                 dr[gasSet[i].name] = f[i];
             }
+           
             dateDt.Rows.Add(dr);
         }
 
@@ -544,6 +549,7 @@ namespace upper_computer
                     selectGas(dtNew);
                 }
 
+
                 //要传输到图表的数据表的筛选
                 DataRow[] dr = dateDt.Select("Date>='" + sToDate(start) + "' and Date<='" + sToDate(end) + "'");
 
@@ -553,7 +559,7 @@ namespace upper_computer
                 {
                     dtNew1.ImportRow(dr[i]);
                 }
-                dtNew1.DefaultView.Sort = "ID ASC";
+                dtNew1.DefaultView.Sort = "Date ASC";
                 dtNew1 = dtNew1.DefaultView.ToTable();
                 selectGasDt(dtNew1);
             }
@@ -615,13 +621,16 @@ namespace upper_computer
                 {
                     dtNew.ImportRow(drArr[i]);
                 }
-                dtNew.DefaultView.Sort = "ID ASC";
+                dtNew.DefaultView.Sort = "Date ASC";
                 dtNew = dtNew.DefaultView.ToTable();
                 currentDt = dtNew;
             }
             else
             {
-                currentDt = datatable;
+                DataTable dtNew = datatable.Copy();
+                dtNew.DefaultView.Sort = "Date ASC";
+                dtNew = dtNew.DefaultView.ToTable();
+                currentDt = dtNew;
             }
         }
 
