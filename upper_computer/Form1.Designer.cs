@@ -68,6 +68,8 @@
             this.dataSet1 = new System.Data.DataSet();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -536,6 +538,8 @@
             this.panel8.AutoSize = true;
             this.panel8.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.panel8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel8.Controls.Add(this.label15);
+            this.panel8.Controls.Add(this.label14);
             this.panel8.Controls.Add(this.label13);
             this.panel8.Controls.Add(this.button7);
             this.panel8.Controls.Add(this.button5);
@@ -552,8 +556,28 @@
             this.panel8.Controls.Add(this.dateTimePicker1);
             this.panel8.Location = new System.Drawing.Point(1100, 14);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(246, 524);
+            this.panel8.Size = new System.Drawing.Size(246, 550);
             this.panel8.TabIndex = 7;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.label15.Location = new System.Drawing.Point(3, 270);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(176, 17);
+            this.label15.TabIndex = 16;
+            this.label15.Text = "浓度低值，默认设为气体低报值";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.label14.Location = new System.Drawing.Point(3, 200);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(176, 17);
+            this.label14.TabIndex = 15;
+            this.label14.Text = "浓度高值，默认设为气体高报值";
             // 
             // label13
             // 
@@ -570,7 +594,7 @@
             this.button7.BackColor = System.Drawing.SystemColors.Control;
             this.button7.Enabled = false;
             this.button7.Font = new System.Drawing.Font("宋体", 12F);
-            this.button7.Location = new System.Drawing.Point(65, 450);
+            this.button7.Location = new System.Drawing.Point(65, 491);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(100, 30);
             this.button7.TabIndex = 14;
@@ -583,7 +607,8 @@
             this.button5.BackColor = System.Drawing.SystemColors.Control;
             this.button5.Enabled = false;
             this.button5.Font = new System.Drawing.Font("宋体", 12F);
-            this.button5.Location = new System.Drawing.Point(70, 390);
+            this.button5.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button5.Location = new System.Drawing.Point(70, 431);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(90, 30);
             this.button5.TabIndex = 13;
@@ -595,7 +620,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("宋体", 12F);
-            this.label12.Location = new System.Drawing.Point(3, 225);
+            this.label12.Location = new System.Drawing.Point(3, 245);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(40, 16);
             this.label12.TabIndex = 11;
@@ -606,7 +631,7 @@
             this.numericUpDown3.DecimalPlaces = 1;
             this.numericUpDown3.Enabled = false;
             this.numericUpDown3.Font = new System.Drawing.Font("Times New Roman", 11F);
-            this.numericUpDown3.Location = new System.Drawing.Point(80, 220);
+            this.numericUpDown3.Location = new System.Drawing.Point(80, 243);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -621,7 +646,7 @@
             this.numericUpDown2.DecimalPlaces = 1;
             this.numericUpDown2.Enabled = false;
             this.numericUpDown2.Font = new System.Drawing.Font("Times New Roman", 11F);
-            this.numericUpDown2.Location = new System.Drawing.Point(80, 170);
+            this.numericUpDown2.Location = new System.Drawing.Point(80, 173);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -639,7 +664,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(72, 16);
             this.label11.TabIndex = 8;
-            this.label11.Text = "选择对象";
+            this.label11.Text = "选择气体";
             // 
             // comboBox6
             // 
@@ -666,7 +691,7 @@
             this.button6.BackColor = System.Drawing.SystemColors.Control;
             this.button6.Enabled = false;
             this.button6.Font = new System.Drawing.Font("宋体", 12F);
-            this.button6.Location = new System.Drawing.Point(70, 330);
+            this.button6.Location = new System.Drawing.Point(70, 371);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(90, 30);
             this.button6.TabIndex = 6;
@@ -698,7 +723,7 @@
             // 
             this.button4.BackColor = System.Drawing.SystemColors.Control;
             this.button4.Font = new System.Drawing.Font("宋体", 12F);
-            this.button4.Location = new System.Drawing.Point(70, 270);
+            this.button4.Location = new System.Drawing.Point(70, 311);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(90, 30);
             this.button4.TabIndex = 1;
@@ -727,7 +752,7 @@
             this.button8.BackColor = System.Drawing.SystemColors.Control;
             this.button8.Enabled = false;
             this.button8.Font = new System.Drawing.Font("宋体", 12F);
-            this.button8.Location = new System.Drawing.Point(1172, 570);
+            this.button8.Location = new System.Drawing.Point(1172, 595);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(90, 30);
             this.button8.TabIndex = 15;
@@ -836,6 +861,8 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
     }
 }
 

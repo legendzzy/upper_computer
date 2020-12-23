@@ -13,7 +13,6 @@ namespace upper_computer
 {
     public partial class Form3 : Form
     {
-        private static int INTERVAL = 3; // 设定时间间隔，数据之间id差多少可以算作同一时间段
         private DataTable dataTable = new DataTable(); //从form1传来的原始数据表
         private Gas[] gasSet = new Gas[6];
         private int gasNumber = 0; //气体数量
@@ -69,8 +68,17 @@ namespace upper_computer
                 
                 if (radioButton1.Checked) //低报
                 {
-                    DataRow[] dr_low = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and " + gasSet[gasIndex].name + "<" + gasSet[gasIndex].high_level_alarm + " and " + gasSet[gasIndex].name + ">=" + alarm);
-                    dr = dr_low;
+                    //对于氧气报警需要特殊处理
+                    if(gasSet[gasIndex].name.Equals("氧气") || gasSet[gasIndex].name.Equals("O2"))
+                    {
+                        DataRow[] dr_low = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and "  + gasSet[gasIndex].name + "<" + alarm);
+                        dr = dr_low;
+                    }
+                    else
+                    {
+                        DataRow[] dr_low = dataTable.Select("Date>='" + startDt + "' and Date<='" + endDt + "' and " + gasSet[gasIndex].name + "<" + gasSet[gasIndex].high_level_alarm + " and " + gasSet[gasIndex].name + ">=" + alarm);
+                        dr = dr_low;
+                    }                   
                 }
                 else if(radioButton2.Checked || radioButton3.Checked) //高报及高于其他数值
                 {

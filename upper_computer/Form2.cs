@@ -139,6 +139,7 @@ namespace upper_computer
         }
 
         //两点之间时间间隔过大不连续时，通过插入空值，中断折线图的连线
+        //本函数用于对数据表中插入这样的空值
         public void addEmptyPoint()
         {
             int ncount = datatable.Rows.Count; //保留原始数据条数，后续增加的空点先放置于数据表后面，只是对ID列进行调整，数据处理完毕后再用ID进行排序
@@ -198,8 +199,7 @@ namespace upper_computer
                 chart1.Series[i].EmptyPointStyle.MarkerSize = 7;
                 chart1.Series[i].EmptyPointStyle.MarkerStyle = MarkerStyle.None;
                 chart1.Series[i].EmptyPointStyle.MarkerBorderColor = Color.Black;
-                chart1.Series[i].EmptyPointStyle.MarkerColor = Color.LightGray;
-                
+                chart1.Series[i].EmptyPointStyle.MarkerColor = Color.LightGray;                
             }
         }
 
@@ -234,19 +234,21 @@ namespace upper_computer
             chart1.ChartAreas[0].AxisX.IsLabelAutoFit = true; 
             chart1.ChartAreas[0].AxisY.IsLabelAutoFit = true;
             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "yyyy-MM-dd HH:mm:ss";
-            chart1.ChartAreas[0].AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.SmallScroll;
+            chart1.ChartAreas[0].AxisX.ScrollBar.ButtonStyle = ScrollBarButtonStyles.All;
             chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = false;
-            chart1.ChartAreas[0].AxisX.ScrollBar.Size = 14;
+            chart1.ChartAreas[0].AxisX.ScrollBar.Size = 16;
+    
             chart1.ChartAreas[0].AxisX.ScaleView.MinSizeType = DateTimeIntervalType.Seconds; 
             chart1.ChartAreas[0].AxisX.ScaleView.SizeType = DateTimeIntervalType.Minutes;
             chart1.ChartAreas[0].AxisX.ScaleView.Size = setScaleView(rownumber);
             chart1.ChartAreas[0].AxisX.ScaleView.MinSize = 1;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollSize = 10;
-            chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 5;
+            //chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 5;
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSizeType = DateTimeIntervalType.Seconds;
             chart1.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Seconds;
             chart1.ChartAreas[0].AxisX.LabelStyle.Angle = 0;
-            //chart1.ChartAreas[0].AxisX.IsMarginVisible = false;
+            chart1.ChartAreas[0].AxisX.IsStartedFromZero = false;
+            
 
             //设置游标格式
             chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
@@ -379,7 +381,7 @@ namespace upper_computer
                         gasChosen[i] = 0;
                 }
 
-                //寻找该时间点的所有气体对应数值
+                //寻找该时间点的所有气体对应数值，并显示在左下部面板中
                 for (int i = 0; i < gasNumber; i++)
                 {
                     foreach (DataPoint dp in chart1.Series[i].Points)
@@ -576,6 +578,7 @@ namespace upper_computer
         //气体选择框初始化
         private void initCheckedListBox()
         {
+            checkedListBox1.Items.Clear();
             for (int i = 0; i < gasNumber; i++)
             {
                 checkedListBox1.Items.Add(gasSet[i].name);
@@ -645,7 +648,6 @@ namespace upper_computer
                 return 50;
             }
         }
-
 
         //设置显示面板，需要适应气体数量
         private void setPanel()
@@ -761,5 +763,13 @@ namespace upper_computer
             }
         }
 
+        //刷新按钮
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //this.Form2_Load(sender, e);
+            //this.Refresh();
+            runMain();
+            chart1.ChartAreas[0].AxisX.ScaleView.Scroll(ScrollType.First);
+        }
     }
 }

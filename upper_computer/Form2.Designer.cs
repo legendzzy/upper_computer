@@ -67,6 +67,7 @@ namespace upper_computer
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -505,12 +506,24 @@ namespace upper_computer
             this.panel4.Size = new System.Drawing.Size(1055, 634);
             this.panel4.TabIndex = 8;
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("黑体", 12F);
+            this.button3.Location = new System.Drawing.Point(67, 605);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(70, 25);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "刷新";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -566,5 +579,6 @@ namespace upper_computer
         private Label label20;
         private Label label19;
         private Panel panel4;
+        private Button button3;
     }
 }

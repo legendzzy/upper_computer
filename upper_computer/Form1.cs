@@ -494,6 +494,10 @@ namespace upper_computer
             try
             {
                 button5.Enabled = true; //启用复位
+                //此处加入复位键的高亮显示
+                button5.BackColor = Color.PaleTurquoise;
+
+
 
                 //选择的筛选起始时间和结束时间
                 string end = dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss");
@@ -548,7 +552,6 @@ namespace upper_computer
                     dtNew = dtNew.DefaultView.ToTable();
                     selectGas(dtNew);
                 }
-
 
                 //要传输到图表的数据表的筛选
                 DataRow[] dr = dateDt.Select("Date>='" + sToDate(start) + "' and Date<='" + sToDate(end) + "'");
@@ -682,6 +685,7 @@ namespace upper_computer
         //复位按钮
         private void button5_Click(object sender, EventArgs e)
         {
+            button5.BackColor = System.Drawing.SystemColors.Control;
             dataGridView1.DataSource = dt;
             for (int i = 0; i < dataGridView1.Columns.Count; i++)
             {

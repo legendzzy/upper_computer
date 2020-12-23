@@ -100,7 +100,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 16);
             this.label1.TabIndex = 2;
-            this.label1.Text = "选择对象";
+            this.label1.Text = "选择气体";
             // 
             // panel1
             // 
@@ -184,9 +184,8 @@
             this.label13.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.label13.Location = new System.Drawing.Point(93, 444);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(17, 19);
+            this.label13.Size = new System.Drawing.Size(0, 19);
             this.label13.TabIndex = 21;
-            this.label13.Text = "4";
             // 
             // label12
             // 
@@ -194,9 +193,8 @@
             this.label12.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.label12.Location = new System.Drawing.Point(93, 403);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(17, 19);
+            this.label12.Size = new System.Drawing.Size(0, 19);
             this.label12.TabIndex = 20;
-            this.label12.Text = "3";
             // 
             // label11
             // 
@@ -204,9 +202,8 @@
             this.label11.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.label11.Location = new System.Drawing.Point(93, 363);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(17, 19);
+            this.label11.Size = new System.Drawing.Size(0, 19);
             this.label11.TabIndex = 19;
-            this.label11.Text = "2";
             // 
             // label10
             // 
@@ -214,9 +211,8 @@
             this.label10.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.label10.Location = new System.Drawing.Point(93, 323);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(17, 19);
+            this.label10.Size = new System.Drawing.Size(0, 19);
             this.label10.TabIndex = 18;
-            this.label10.Text = "1";
             // 
             // radioButton2
             // 
